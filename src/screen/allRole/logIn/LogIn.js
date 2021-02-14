@@ -10,7 +10,6 @@ import {
   ScrollView,
   ActivityIndicator,
   Linking,
-  Modal,
   Alert,
 } from 'react-native';
 import styles from '../../../assets/style/boxAllRole/boxAutentikasi/boxAutentivikasi';
@@ -42,29 +41,32 @@ export class LogIn extends Component {
       password: '',
       loading: false,
       url: 'http://sammpah.herokuapp.com/password/reset',
-      modal: false,
+      urlEmail: 'https://mail.google.com/mail/u/0/#inbox',
       visible: true,
     };
   }
   alert() {
     Alert.alert(
       '',
-      'Convirmation Email Anda',
+      'Mohon di Convirmation Email Terlebih Dahulu',
       [
         {
           text: 'Convirmation',
           onPress: () => this.handlePress1(),
+        },
+        {
+          text: 'Tutup',
         },
       ],
       {cancelable: false},
     );
   }
   handlePress1 = async () => {
-    const supported = await Linking.canOpenURL(this.state.url);
+    const supported = await Linking.canOpenURL(this.state.urlEmail);
     if (supported) {
-      await Linking.openURL(this.state.url);
+      await Linking.openURL(this.state.urlEmail);
     } else {
-      Alert.alert(`Don't know how to open this URL: ${this.state.url}`);
+      Alert.alert(`Don't know how to open this URL: ${this.state.urlEmail}`);
     }
   };
 
@@ -86,17 +88,26 @@ export class LogIn extends Component {
       .then((res) => res.json())
       .then((resjson) => {
         console.log(resjson);
-        const {token} = resjson;
+        const {token, user} = resjson;
         if (token) {
-          ToastAndroid.show(
-            ' Anda Telah Masuk',
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER,
-            // console.log(resJson),
-            AsyncStorage.setItem('token', token),
-            this.setState({loading: false}),
-            // this.props.navigation.navigate('Login'),
-          );
+          if ((user.email_verified_at = !null)) {
+            ToastAndroid.show(
+              ' Anda Telah Masuk',
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER,
+              // console.log(resJson),
+            );
+            AsyncStorage.setItem('user', user.id.toString());
+            AsyncStorage.setItem('role', user.role.toString());
+            AsyncStorage.setItem('token', token);
+            console.log(' ini role ', resjson.user.role);
+            this.role_id(user.role);
+            this.setState({loading: false});
+            this.props.navigation.navigate('Rumah');
+          } else {
+            this.alert()
+            console.log('anda belum verifikasi email');
+          }
         } else if (resjson.error) {
           alert(resjson.error);
           this.setState({loading: false});

@@ -6,7 +6,7 @@ export class Home extends Component {
   render() {
     return (
       <View style={styles.utama}>
-        <Text> textInComponent </Text>
+        <Text> INi Home </Text>
       </View>
     );
   }
