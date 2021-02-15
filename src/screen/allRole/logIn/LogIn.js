@@ -70,6 +70,24 @@ export class LogIn extends Component {
     }
   };
 
+  role_id = (id) => {
+    if (id == 'kasir') {
+      console.log(id, 'yang masuk');
+      this.props.navigation.replace('Rumah');
+    } else if (id == 'staf') {
+      console.log(id, 'yang masuk');
+      this.props.navigation.replace('Rumah');
+    } else if (id == 'pemimpin') {
+      console.log(id, 'yang masuk');
+      this.props.navigation.replace('Rumah');
+    } else if (id == 'member') {
+      console.log(id, 'yang masuk');
+      this.props.navigation.replace('Rumah');
+    } else {
+      console.log('ada orang lain asing masuk');
+    }
+  };
+
   LogIn() {
     const {email, password} = this.state;
     const url = `https://katastima-pos.herokuapp.com/api/auth/login`;
@@ -91,21 +109,18 @@ export class LogIn extends Component {
         const {token, user} = resjson;
         if (token) {
           if ((user.email_verified_at = !null)) {
+            AsyncStorage.setItem('token', token);
+            AsyncStorage.setItem('role', user.role);
             ToastAndroid.show(
               ' Anda Telah Masuk',
               ToastAndroid.SHORT,
               ToastAndroid.CENTER,
-              // console.log(resJson),
             );
-            AsyncStorage.setItem('user', user.id.toString());
-            AsyncStorage.setItem('role', user.role.toString());
-            AsyncStorage.setItem('token', token);
             console.log(' ini role ', resjson.user.role);
             this.role_id(user.role);
             this.setState({loading: false});
-            this.props.navigation.navigate('Rumah');
           } else {
-            this.alert()
+            this.alert();
             console.log('anda belum verifikasi email');
           }
         } else if (resjson.error) {

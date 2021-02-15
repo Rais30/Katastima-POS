@@ -1,12 +1,36 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {Component} from 'react';
 import {Text, View, Image} from 'react-native';
 import styles from '../style/boxSplashIntro/SplashIntro';
 
 export class Splash extends Component {
   componentDidMount() {
-    setTimeout(() => {
-      this.props.navigation.replace('Intro');
-    }, 5000);
+    AsyncStorage.getItem('token').then((token) => {
+      if (token == !null) {
+        AsyncStorage.getItem('role').then((role) => {
+          console.log(role);
+          if (role == 'kasir') {
+            console.log(role, 'masuk ke aplikasi');
+            this.props.navigation.replace('Rumah');
+          } else if (role == 'staf') {
+            console.log(role, 'masuk ke aplikasi');
+            this.props.navigation.replace('Rumah');
+          } else if (role == 'member') {
+            console.log(role, 'masuk ke aplikasi');
+            this.props.navigation.replace('Rumah');
+          } else if (role == 'pemimpin') {
+            console.log(role, 'masuk ke aplikasi');
+            this.props.navigation.replace('Rumah');
+          } else {
+            console.log('anda orang asing masuk ke aplikasi');
+          }
+        });
+      } else {
+        setTimeout(() => {
+          this.props.navigation.replace('Intro');
+        }, 2000);
+      }
+    });
   }
   render() {
     return (

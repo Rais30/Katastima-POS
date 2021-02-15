@@ -6,7 +6,7 @@ export class Home extends Component {
   render() {
     return (
       <View style={styles.utama}>
-        <Text> INi Home </Text>
+        <Text onPress={() => this.props.navigation.openDrawer()}>INi Home</Text>
       </View>
     );
   }

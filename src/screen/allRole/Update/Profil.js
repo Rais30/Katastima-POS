@@ -10,7 +10,7 @@ import {
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import styles from '../../../assets/style/boxAllRole/boxUpdate/Update';
 
-export class Profil extends Component {
+export class EditProfil extends Component {
   render() {
     return (
       <View style={styles.utama}>
@@ -20,4 +20,4 @@ export class Profil extends Component {
   }
 }
 
-export default Profil;
+export default EditProfil;
