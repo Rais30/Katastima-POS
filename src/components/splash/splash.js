@@ -6,7 +6,7 @@ import styles from '../style/boxSplashIntro/SplashIntro';
 export class Splash extends Component {
   componentDidMount() {
     AsyncStorage.getItem('token').then((token) => {
-      if (token == !null) {
+      if (token != null) {
         AsyncStorage.getItem('role').then((role) => {
           console.log(role);
           if (role == 'kasir') {
@@ -28,7 +28,7 @@ export class Splash extends Component {
       } else {
         setTimeout(() => {
           this.props.navigation.replace('Intro');
-        }, 2000);
+        }, 3000);
       }
     });
   }

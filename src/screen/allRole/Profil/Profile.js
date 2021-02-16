@@ -1,15 +1,37 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {Component} from 'react';
+import React, {Component, useCallback} from 'react';
 import {
   Text,
   View,
   Image,
   TouchableNativeFeedback,
-  Button,
+  Linking,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
 import styles from '../../../assets/style/boxAllRole/boxProfil/index';
+const OpenURLButton = ({url, children}) => {
+  const handlePress = useCallback(async () => {
+    const supported = await Linking.canOpenURL(
+      'http://sammpah.herokuapp.com/password/reset',
+    );
+    if (supported) {
+      await Linking.openURL('http://sammpah.herokuapp.com/password/reset');
+    } else {
+      Alert.alert(
+        `Don't know how to open this URL: ${'http://sammpah.herokuapp.com/password/reset'}`,
+      );
+    }
+  }, [url]);
+
+  return (
+    <View style={styles.tomabol}>
+      <TouchableNativeFeedback onPress={handlePress}>
+        <Text style={styles.taksfFitur}>{children}</Text>
+      </TouchableNativeFeedback>
+    </View>
+  );
+};
 export class Profil extends Component {
   constructor() {
     super();
@@ -84,18 +106,26 @@ export class Profil extends Component {
                 </View>
               </View>
               <View>
-                <TouchableOpacity style={styles.klikFitur}>
+                <TouchableOpacity
+                  style={styles.klikFitur}
+                  onPress={() =>
+                    this.props.navigation.navigate('EditProfil', {
+                      data: this.state.data,
+                    })
+                  }>
                   <Text style={styles.taksfFitur}> Setting </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.klikFitur}>
                   <Text style={styles.taksfFitur}> Ubah Password </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.klikFitur}>
-                  <Text style={styles.taksfFitur}> Lupa Password </Text>
+                  <OpenURLButton url={this.state.url}>
+                    Lupa Password
+                  </OpenURLButton>
                 </TouchableOpacity>
               </View>
               <View style={styles.tombol}>
-                <TouchableNativeFeedback>
+                <TouchableNativeFeedback onPress={() => this.LogOut()}>
                   <Text style={styles.taksTombol}> Keluar </Text>
                 </TouchableNativeFeedback>
               </View>
