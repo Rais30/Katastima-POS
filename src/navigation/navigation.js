@@ -9,6 +9,7 @@ import Register from '../screen/allRole/register/Register';
 import LogIn from '../screen/allRole/logIn/LogIn';
 import EditProfil from '../screen/allRole/Update/Profil';
 import Rumah from './navigatio1';
+import cariBarang from '../screen/allRole/cariBarang/cariBarang';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,7 @@ const Navigation = () => {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Rumah" component={Rumah} />
         <Stack.Screen name="EditProfil" component={EditProfil} />
+        <Stack.Screen name="Cari" component={cariBarang} />
       </Stack.Navigator>
     </NavigationContainer>
   );
