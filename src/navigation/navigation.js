@@ -10,6 +10,10 @@ import LogIn from '../screen/allRole/logIn/LogIn';
 import EditProfil from '../screen/allRole/Update/Profil';
 import Rumah from './navigatio1';
 import cariBarang from '../screen/allRole/cariBarang/cariBarang';
+import Rumah1 from './navigation2';
+import Rumah4 from './navigation4';
+import Rumah3 from './navigation3';
+import Password from '../screen/allRole/Update/Password';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +32,10 @@ const Navigation = () => {
         <Stack.Screen name="Rumah" component={Rumah} />
         <Stack.Screen name="EditProfil" component={EditProfil} />
         <Stack.Screen name="Cari" component={cariBarang} />
+        <Stack.Screen name="Rumah1" component={Rumah1} />
+        <Stack.Screen name="Rumah3" component={Rumah3} />
+        <Stack.Screen name="Rumah4" component={Rumah4} />
+        <Stack.Screen name="Password" component={Password} />
       </Stack.Navigator>
     </NavigationContainer>
   );

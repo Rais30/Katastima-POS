@@ -14,13 +14,13 @@ export class Splash extends Component {
             this.props.navigation.replace('Rumah');
           } else if (role == 'staf') {
             console.log(role, 'masuk ke aplikasi');
-            this.props.navigation.replace('Rumah');
+            this.props.navigation.replace('Rumah3');
           } else if (role == 'member') {
             console.log(role, 'masuk ke aplikasi');
-            this.props.navigation.replace('Rumah');
+            this.props.navigation.replace('Rumah1');
           } else if (role == 'pemimpin') {
             console.log(role, 'masuk ke aplikasi');
-            this.props.navigation.replace('Rumah');
+            this.props.navigation.replace('Rumah4');
           } else {
             console.log('anda orang asing masuk ke aplikasi');
           }

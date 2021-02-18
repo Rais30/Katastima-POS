@@ -76,13 +76,13 @@ export class LogIn extends Component {
       this.props.navigation.replace('Rumah');
     } else if (id == 'staf') {
       console.log(id, 'yang masuk');
-      this.props.navigation.replace('Rumah');
+      this.props.navigation.replace('Rumah3');
     } else if (id == 'pemimpin') {
       console.log(id, 'yang masuk');
-      this.props.navigation.replace('Rumah');
+      this.props.navigation.replace('Rumah4');
     } else if (id == 'member') {
       console.log(id, 'yang masuk');
-      this.props.navigation.replace('Rumah');
+      this.props.navigation.replace('Rumah1');
     } else {
       console.log('ada orang lain asing masuk');
     }

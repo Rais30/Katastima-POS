@@ -27,7 +27,7 @@ const OpenURLButton = ({url, children}) => {
   return (
     <View style={styles.tomabol}>
       <TouchableNativeFeedback onPress={handlePress}>
-        <Text style={styles.taksfFitur}>{children}</Text>
+        <Text style={{...styles.taksfFitur, color: 'blue'}}>{children}</Text>
       </TouchableNativeFeedback>
     </View>
   );
@@ -115,7 +115,9 @@ export class Profil extends Component {
                   }>
                   <Text style={styles.taksfFitur}> Setting </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.klikFitur}>
+                <TouchableOpacity
+                  style={styles.klikFitur}
+                  onPress={() => this.props.navigation.navigate('Password')}>
                   <Text style={styles.taksfFitur}> Ubah Password </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.klikFitur}>
