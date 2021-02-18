@@ -42,19 +42,18 @@ export class Password extends Component {
     this.setState({loading: true});
 
     fetch(url, {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify(data),
       headers: {
-        Accept: 'application/json',
-        // 'Content-Type': 'application/json',
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${this.state.token}`,
       },
     })
       .then((respon) => respon.json())
       .then((resJson) => {
         console.log(resJson);
-        const {status} = resJson;
-        if ((status = 'succes')) {
+        const {message} = resJson;
+        if (message == 'Your password has been change') {
           ToastAndroid.show(
             ' Password Berasil Di Ubah',
             ToastAndroid.SHORT,
@@ -77,7 +76,6 @@ export class Password extends Component {
           } else {
             console.log('anda orang asing masuk ke aplikasi');
           }
-          // this.props.navigation.navigate('Home');
         } else {
           this.setState({loading: false});
           console.log('error');
@@ -85,7 +83,6 @@ export class Password extends Component {
         }
       })
       .catch((error) => {
-        this.setState({loading: false});
         console.log('error nya adalah ' + error);
       });
   };
@@ -107,7 +104,7 @@ export class Password extends Component {
     return (
       <View style={styles.utama}>
         <View style={styles.boxDataInput}>
-          <Text style={styles.taksTitle}>Password lamas</Text>
+          <Text style={styles.taksTitle}>Password suwe</Text>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <TextInput
               style={styles.input}
