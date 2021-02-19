@@ -14,7 +14,7 @@ export class cariBarang extends Component {
   constructor() {
     super();
     this.state = {
-      dataInput: 'ABC',
+      dataInput: '',
       dataMap: [],
       loading: false,
       token: '',
