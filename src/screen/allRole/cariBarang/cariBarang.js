@@ -14,7 +14,7 @@ export class cariBarang extends Component {
   constructor() {
     super();
     this.state = {
-      dataInput: '',
+      dataInput: 'ABC',
       dataMap: [],
       loading: false,
       token: '',
@@ -22,8 +22,9 @@ export class cariBarang extends Component {
   }
   GetBarang = () => {
     console.log('get  barang');
-    const {token} = this.state;
-    const url = 'https://katastima-pos.herokuapp.com/api/cari-barang/';
+    const {token, dataInput} = this.state;
+    const q = dataInput !== '' ? `/${dataInput}` : '';
+    const url = `https://katastima-pos.herokuapp.com/api/cari-barang${q}`;
     this.setState({loading: true});
     console.log(token);
     fetch(url, {
@@ -31,7 +32,7 @@ export class cariBarang extends Component {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer${token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => res.json())
