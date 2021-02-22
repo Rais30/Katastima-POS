@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
 
-export class RegisMember extends Component {
+export class gudang extends Component {
   render() {
     return (
       <View>
-        <Text> Register Member oleh Kasir </Text>
+        <Text> Stok barang Gudang </Text>
       </View>
     );
   }
 }
 
-export default RegisMember;
+export default gudang;

@@ -13,6 +13,8 @@ import Rumah4 from './navigation4';
 import Rumah3 from './navigation3';
 import Password from '../screen/allRole/Update/Password';
 import RegisMember from '../screen/kasir/RegisMember';
+import Respon from '../screen/allRole/BoxRespos/Respon';
+
 const Stack = createStackNavigator();
 
 const Navigation = () => {
@@ -35,6 +37,7 @@ const Navigation = () => {
         <Stack.Screen name="Rumah4" component={Rumah4} />
         <Stack.Screen name="Password" component={Password} />
         <Stack.Screen name="RegisMember" component={RegisMember} />
+        <Stack.Screen name="Respon" component={Respon} />
       </Stack.Navigator>
     </NavigationContainer>
   );

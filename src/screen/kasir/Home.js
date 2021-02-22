@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {Component} from 'react';
 import {
   Image,
@@ -6,6 +7,7 @@ import {
   TouchableNativeFeedback,
   View,
   Modal,
+  ScrollView,
 } from 'react-native';
 import styles from '../../assets/style/boxKasir/boxHomeKasir/index';
 
@@ -13,15 +15,14 @@ export class Home extends Component {
   constructor() {
     super();
     this.state = {
-      dataBarang: '1',
+      dataBarang: [2],
       dataMember: '',
       loading: false,
       data: '',
       data1: '',
       dataKosong: '',
-      modalBarang: false,
       modalMember: false,
-      JmlhBarang: '',
+      token: '',
     };
   }
   Member = () => {
@@ -63,25 +64,32 @@ export class Home extends Component {
   };
   Barang = () => {
     return (
-      <View style={{flexDirection: 'row'}}>
-        <View style={styles.dataBarang}>
-          <Text> 1 </Text>
+      <View>
+        <View style={{flexDirection: 'row'}}>
+          <View style={styles.dataBarang}>
+            <Text> 1 </Text>
+          </View>
+          <View style={styles.dataBarang}>
+            <Text> Mie Indomie</Text>
+          </View>
+          <View style={styles.dataBarang}>
+            <Text> Rp.3.000,-</Text>
+          </View>
+          <View style={styles.dataBarang}>
+            <Text> 5 </Text>
+          </View>
+          <View style={styles.dataBarang}>
+            <Text> Rp.15.000 </Text>
+          </View>
         </View>
-        <View style={styles.dataBarang}>
-          <Text> Mie Indomie</Text>
-        </View>
-        <View style={styles.dataBarang}>
-          <Text> Rp.3.000,-</Text>
-        </View>
-        <View style={styles.dataBarang}>
-          <Text> 5 </Text>
-        </View>
-        <View style={styles.dataBarang}>
-          <Text> Rp.15.000 </Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+          <Text> Total : </Text>
+          <Text>Rp. 15.000,-</Text>
         </View>
       </View>
     );
   };
+
   render() {
     return (
       <View style={styles.utama}>
@@ -95,7 +103,7 @@ export class Home extends Component {
           </TouchableNativeFeedback>
           <Text style={styles.taksIcon}> atastima</Text>
         </View>
-        <View>
+        <ScrollView style={styles.utama}>
           <View style={{...styles.boxInputMember, alignSelf: 'center'}}>
             <TouchableNativeFeedback
               onPress={() => this.props.navigation.navigate('Cari')}>
@@ -104,16 +112,13 @@ export class Home extends Component {
               </Text>
             </TouchableNativeFeedback>
           </View>
-          {this.state.dataBarang == '' ? (
-            <View></View>
-          ) : (
-            <View>{this.Barang()}</View>
-          )}
-          {this.state.JmlhBarang == '' ? (
-            <View></View>
-          ) : (
-            <View>{this.Barang()}</View>
-          )}
+          <ScrollView>
+            {this.state.dataBarang == '' ? (
+              <View></View>
+            ) : (
+              <View>{this.Barang()}</View>
+            )}
+          </ScrollView>
           <View style={{flexDirection: 'row', padding: 5}}></View>
           <View style={styles.boxInputMember}>
             <TextInput
@@ -125,7 +130,7 @@ export class Home extends Component {
               }
             />
             <TouchableNativeFeedback
-              onPress={() => this.setState({dataMember: this.state.data})}>
+              onPress={() => this.setState({modalMember: true})}>
               <Image
                 style={{...styles.Icon, margin: 10}}
                 source={require('../../assets/logoAplikasi/pngaaa.com-607749.png')}
@@ -151,7 +156,16 @@ export class Home extends Component {
               </Text>
             </TouchableNativeFeedback>
           </View>
-        </View>
+        </ScrollView>
+        <Modal
+          visible={this.state.modalMember}
+          animationType="fade"
+          onRequestClose={() => this.setState({modalMember: false})}
+          transparent>
+          <View style={{flex: 1, backgroundColor: 'white'}}>
+            {this.Member()}
+          </View>
+        </Modal>
       </View>
     );
   }

@@ -1,7 +1,8 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Profil from '../screen/allRole/Profil/Profile';
-import Home from '../screen/staf/Home';
+
+import TabRumah from '../screen/staf/Navigation/navigationStaff';
 
 const Drawer = createDrawerNavigator();
 
@@ -10,7 +11,7 @@ function Rumah3() {
     <Drawer.Navigator
       initialRouteName="Home"
       drawerContent={(props) => <Profil {...props} />}>
-      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Home" component={TabRumah} />
     </Drawer.Navigator>
   );
 }
