@@ -13,7 +13,7 @@ export class Home extends Component {
   constructor() {
     super();
     this.state = {
-      dataBarang: '',
+      dataBarang: '1',
       dataMember: '',
       loading: false,
       data: '',
@@ -21,6 +21,7 @@ export class Home extends Component {
       dataKosong: '',
       modalBarang: false,
       modalMember: false,
+      JmlhBarang: '',
     };
   }
   Member = () => {
@@ -72,8 +73,11 @@ export class Home extends Component {
         <View style={styles.dataBarang}>
           <Text> Rp.3.000,-</Text>
         </View>
-        <View>
-          <TextInput placeholder="J. Barang" />
+        <View style={styles.dataBarang}>
+          <Text> 5 </Text>
+        </View>
+        <View style={styles.dataBarang}>
+          <Text> Rp.15.000 </Text>
         </View>
       </View>
     );
@@ -96,12 +100,16 @@ export class Home extends Component {
             <TouchableNativeFeedback
               onPress={() => this.props.navigation.navigate('Cari')}>
               <Text style={{fontSize: 20, color: 'white', padding: 5}}>
-                {' '}
-                Pencarian Barang{' '}
+                Pencarian Barang
               </Text>
             </TouchableNativeFeedback>
           </View>
           {this.state.dataBarang == '' ? (
+            <View></View>
+          ) : (
+            <View>{this.Barang()}</View>
+          )}
+          {this.state.JmlhBarang == '' ? (
             <View></View>
           ) : (
             <View>{this.Barang()}</View>
@@ -139,8 +147,7 @@ export class Home extends Component {
                   color: 'white',
                   padding: 5,
                 }}>
-                {' '}
-                Pembanyaran{' '}
+                Pembanyaran
               </Text>
             </TouchableNativeFeedback>
           </View>

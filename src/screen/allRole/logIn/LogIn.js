@@ -74,10 +74,10 @@ export class LogIn extends Component {
     if (id == 'kasir') {
       console.log(id, 'yang masuk');
       this.props.navigation.replace('Rumah');
-    } else if (id == 'staf') {
+    } else if (id == 'staff') {
       console.log(id, 'yang masuk');
       this.props.navigation.replace('Rumah3');
-    } else if (id == 'pemimpin') {
+    } else if (id == 'pimpinan') {
       console.log(id, 'yang masuk');
       this.props.navigation.replace('Rumah4');
     } else if (id == 'member') {

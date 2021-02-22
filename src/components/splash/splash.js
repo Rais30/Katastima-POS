@@ -12,13 +12,13 @@ export class Splash extends Component {
           if (role == 'kasir') {
             console.log(role, 'masuk ke aplikasi');
             this.props.navigation.replace('Rumah');
-          } else if (role == 'staf') {
+          } else if (role == 'staff') {
             console.log(role, 'masuk ke aplikasi');
             this.props.navigation.replace('Rumah3');
           } else if (role == 'member') {
             console.log(role, 'masuk ke aplikasi');
             this.props.navigation.replace('Rumah1');
-          } else if (role == 'pemimpin') {
+          } else if (role == 'pimpinan') {
             console.log(role, 'masuk ke aplikasi');
             this.props.navigation.replace('Rumah4');
           } else {
