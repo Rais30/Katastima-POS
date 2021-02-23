@@ -26,12 +26,8 @@ export class cariBarang extends Component {
       kosong: '',
       jBarang: 0,
     };
-
-    this.Json();
   }
-  Json = () => {
-    JSON.stringify(this.state.jBarang);
-  };
+
   GetBarang = () => {
     console.log('get  barang');
     const {token, dataInput} = this.state;

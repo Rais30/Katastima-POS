@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 export default StyleSheet.create({
   utama: {
     flex: 1,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
   },
   headher: {
     backgroundColor: 'blue',
@@ -50,5 +50,14 @@ export default StyleSheet.create({
   teksTombol: {
     fontSize: 19,
     color: 'white',
+  },
+  modal: {
+    // alignSelf: 'center',
+    // justifyContent: 'center',
+    backgroundColor: 'white',
+    padding: 10,
+    borderRadius: 10,
+    elevation: 5,
+    width: '90%',
   },
 });
