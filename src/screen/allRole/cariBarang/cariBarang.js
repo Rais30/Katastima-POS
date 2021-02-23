@@ -27,6 +27,7 @@ export class cariBarang extends Component {
       kosong: '',
       jBarang: 0,
       idBarang: '',
+      penjualan_id: '',
     };
   }
 
@@ -55,12 +56,38 @@ export class cariBarang extends Component {
         this.setState({loading: false, dataInput: this.state.kosong});
       });
   };
+  GetBarang1 = () => {
+    console.log('get  barang');
+    const {token, dataInput} = this.state;
+    const q = dataInput !== '' ? `/${dataInput}` : '';
+    const url = `https://katastima-pos.herokuapp.com/api/cari-barang${q}`;
+    this.setState({loading: true});
+    console.log(token);
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((resjson) => {
+        this.setState({dataMap: resjson, loading: false});
+        console.log('barang ', resjson);
+      })
+      .catch((error) => {
+        console.log('ini ada error', error);
+        this.setState({loading: false, dataInput: this.state.kosong});
+      });
+  };
   TambahBatang = () => {
     console.log('get  barang');
-    const {token, jBarang, idBarang} = this.state;
+    const {token, jBarang, idBarang, penjualan_id} = this.state;
     const data = {
       product_id: idBarang,
       quantity: jBarang,
+      penjualan_id: penjualan_id,
     };
     const url = `https://katastima-pos.herokuapp.com/api/kasir/penjualan/create-detail`;
     this.setState({loading1: true});
@@ -76,13 +103,13 @@ export class cariBarang extends Component {
     })
       .then((res) => res.json())
       .then((resjson) => {
-        const {status} = resjson;
-        if (status == 'success') {
+        const {kode_transaksi} = resjson;
+        if (kode_transaksi != null) {
           console.log('ini respon : ', resjson);
           this.setState({loading1: false, modal: false});
           this.props.navigation.navigate('RumahKasir');
         } else {
-          console.log('ini adalah res nya : ', resjson);
+          console.log('ini adalah res else nya : ', resjson);
           this.setState({loading1: false, modal: false});
         }
       })
@@ -96,6 +123,9 @@ export class cariBarang extends Component {
       if (token) {
         this.setState({token: token});
         console.log(this.state.token);
+        this.setState({penjualan_id: this.props.route.params.id});
+        console.log('ini di penjualan : ', this.state.penjualan_id);
+        this.GetBarang1();
       } else {
         console.log('tidak ada token');
       }

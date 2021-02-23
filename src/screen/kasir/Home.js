@@ -167,7 +167,7 @@ export class Home extends Component {
                 <TouchableNativeFeedback
                   onPress={() =>
                     this.props.navigation.navigate('Cari', {
-                      penjualan_id: this.state.penjualan_id,
+                      id: this.state.penjualan_id,
                     })
                   }>
                   <Text style={{fontSize: 20, color: 'white', padding: 5}}>
