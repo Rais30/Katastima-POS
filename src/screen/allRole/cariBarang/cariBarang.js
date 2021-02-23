@@ -21,10 +21,12 @@ export class cariBarang extends Component {
       dataInput: '',
       dataMap: [],
       loading: false,
+      loading1: false,
       token: '',
       modal: false,
       kosong: '',
       jBarang: 0,
+      idBarang: '',
     };
   }
 
@@ -51,6 +53,42 @@ export class cariBarang extends Component {
       .catch((error) => {
         console.log('ini ada error', error);
         this.setState({loading: false, dataInput: this.state.kosong});
+      });
+  };
+  TambahBatang = () => {
+    console.log('get  barang');
+    const {token, jBarang, idBarang} = this.state;
+    const data = {
+      product_id: idBarang,
+      quantity: jBarang,
+    };
+    const url = `https://katastima-pos.herokuapp.com/api/kasir/penjualan/create-detail`;
+    this.setState({loading1: true});
+    console.log(token);
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((resjson) => {
+        const {status} = resjson;
+        if (status == 'success') {
+          console.log('ini respon : ', resjson);
+          this.setState({loading1: false, modal: false});
+          this.props.navigation.navigate('RumahKasir');
+        } else {
+          console.log('ini adalah res nya : ', resjson);
+          this.setState({loading1: false, modal: false});
+        }
+      })
+      .catch((error) => {
+        console.log('ini ada error', error);
+        this.setState({loading1: false, modal: false});
       });
   };
   componentDidMount() {
@@ -97,7 +135,9 @@ export class cariBarang extends Component {
                   return (
                     <View key={key}>
                       <TouchableNativeFeedback
-                        onPress={() => this.setState({modal: true})}>
+                        onPress={() =>
+                          this.setState({modal: true, idBarang: val.id})
+                        }>
                         <View style={styles.boxDataMap}>
                           <Text>{'Kode Barang : ' + val.UID}</Text>
                           <Text>{'nama : ' + val.nama}</Text>
@@ -143,13 +183,14 @@ export class cariBarang extends Component {
                     <Text>K</Text>
                   </TouchableOpacity>
                 </View>
-                <TouchableNativeFeedback
-                  onPress={() =>
-                    this.props.navigation.navigate('Rumah', {barang: 'ada'})
-                  }>
-                  <View style={styles.tombol}>
-                    <Text style={styles.taksTombol}> Tambah </Text>
-                  </View>
+                <TouchableNativeFeedback onPress={() => this.TambahBatang()}>
+                  {this.state.loading1 ? (
+                    <ActivityIndicator size={30} color="white" />
+                  ) : (
+                    <View style={styles.tombol}>
+                      <Text style={styles.taksTombol}> Tambah </Text>
+                    </View>
+                  )}
                 </TouchableNativeFeedback>
               </View>
             </View>
