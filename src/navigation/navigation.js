@@ -39,7 +39,7 @@ const Navigation = () => {
         <Stack.Screen name="Password" component={Password} />
         <Stack.Screen name="RegisMember" component={RegisMember} />
         <Stack.Screen name="Respon" component={Respon} />
-        <Stack.Screen name="RumahKasir" component={TabRumah} />
+        <Stack.Screen name="TabRumah" component={TabRumah} />
       </Stack.Navigator>
     </NavigationContainer>
   );

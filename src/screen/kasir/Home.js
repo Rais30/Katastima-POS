@@ -8,7 +8,9 @@ import {
   View,
   Modal,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ActivityIndicator} from 'react-native-paper';
 import styles from '../../assets/style/boxKasir/boxHomeKasir/index';
 
@@ -24,8 +26,16 @@ export class Home extends Component {
       data1: '',
       dataKosong: [],
       modalMember: false,
+      modalPembanyaran: false,
       token: '',
       penjualan_id: '',
+      member_id: '',
+      jenis_pembayaran: 'tunai',
+      dibayar: '',
+      pesan: '',
+      dataPembanyaran: '',
+      jumlah: '',
+      modal: false,
     };
   }
   Member = () => {
@@ -91,7 +101,7 @@ export class Home extends Component {
         })}
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
           <Text> Total : </Text>
-          <Text>Rp. 15.000,-</Text>
+          <Text>{'Rp.' + this.state.jumlah}</Text>
         </View>
       </View>
     );
@@ -117,15 +127,80 @@ export class Home extends Component {
           penjualan_id: data.id,
           dataBarang: data.detail_penjualan,
           loading1: false,
+          jumlah: data.total_price,
         });
 
-        console.log('barang ', data);
+        console.log('barang ', resjson);
       })
       .catch((error) => {
         console.log('ini ada error', error);
         this.setState({loading1: false, dataInput: this.state.kosong});
       });
   };
+  Pembanyaran = () => {
+    const {
+      token,
+      penjualan_id,
+      member_id,
+      jenis_pembayaran,
+      dibayar,
+    } = this.state;
+    const url =
+      'https://katastima-pos.herokuapp.com/api/kasir/penjualan/finish';
+    const data = {
+      penjualan_id: penjualan_id,
+      jenis_pembayaran: jenis_pembayaran,
+      dibayar: dibayar,
+    };
+    this.setState({loading1: true});
+    member_id != '' ? (data.member_id = member_id) : null;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'applicetion/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((resjson) => {
+        const {status, error} = resjson;
+        if (status == 'success') {
+          console.log('ini res pon bersil', resjson);
+          this.setState({
+            dataPembanyaran: resjson.data,
+            modalPembanyaran: true,
+            loading1: false,
+          });
+          ToastAndroid.show(
+            ' Transaksi Berasil ',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
+        } else if (status == 'failed' && error) {
+          console.log('orang kere ', resjson);
+          this.setState({
+            pesan: resjson.message,
+            modalPembanyaran: true,
+            loading1: false,
+          });
+          ToastAndroid.show(
+            ' Dana anda tidak Cukup ',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
+        } else {
+          console.log(' ini ada kesalahan ', resjson);
+          this.setState({loading1: false});
+        }
+      })
+      .catch((error) => {
+        this.setState({loading1: false});
+        console.log('error adalah ' + error);
+      });
+  };
+
   componentDidMount() {
     AsyncStorage.getItem('token').then((token) => {
       if (token) {
@@ -138,6 +213,7 @@ export class Home extends Component {
   }
 
   render() {
+    const {dataPembanyaran, jenis_pembayaran, dibayar} = this.state;
     return (
       <View style={styles.utama}>
         <View style={styles.headher}>
@@ -208,16 +284,21 @@ export class Home extends Component {
             )}
 
             <View style={styles.klikBayar}>
-              <TouchableNativeFeedback>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                    color: 'white',
-                    padding: 5,
-                  }}>
-                  Pembanyaran
-                </Text>
+              <TouchableNativeFeedback
+                onPress={() => this.setState({modal: true})}>
+                {this.state.loading1 ? (
+                  <ActivityIndicator size={30} color="white" />
+                ) : (
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color: 'white',
+                      padding: 5,
+                    }}>
+                    Pembanyaran
+                  </Text>
+                )}
               </TouchableNativeFeedback>
             </View>
           </ScrollView>
@@ -229,6 +310,79 @@ export class Home extends Component {
           transparent>
           <View style={{flex: 1, backgroundColor: 'white'}}>
             {this.Member()}
+          </View>
+        </Modal>
+        <Modal
+          visible={this.state.modalPembanyaran}
+          animationType="fade"
+          onRequestClose={() => this.setState({modalPembanyaran: false})}
+          transparent>
+          <View style={{flex: 1, backgroundColor: 'white'}}>
+            <Text>{'total : Rp. ' + dataPembanyaran.total_price}</Text>
+            <Text>
+              {'jenis pembayaran : ' + dataPembanyaran.jenis_pembayaran}
+            </Text>
+            <Text>{'Uang : Rp. ' + dataPembanyaran.dibayar}</Text>
+            <Text>{'kembalian : Rp. ' + dataPembanyaran.kembalian}</Text>
+          </View>
+        </Modal>
+        <Modal
+          visible={this.state.modal}
+          animationType="fade"
+          onRequestClose={() => this.setState({modal: false})}
+          transparent>
+          <View style={{flex: 1, backgroundColor: 'white'}}>
+            <View
+              style={{
+                justifyContent: 'space-around',
+                flexDirection: 'row',
+              }}>
+              <TouchableOpacity
+                style={{
+                  margin: 10,
+                  backgroundColor: 'blue',
+                  padding: 5,
+                  borderRadius: 10,
+                }}
+                onPress={() => this.setState({jenis_pembayaran: 'tunai'})}>
+                <Text style={{fontSize: 20, color: 'white'}}>Tunai</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  margin: 10,
+                  backgroundColor: 'blue',
+                  padding: 5,
+                  borderRadius: 10,
+                }}
+                onPress={() => this.setState({jenis_pembayaran: 'debit'})}>
+                <Text style={{fontSize: 20, color: 'white'}}>Debit</Text>
+              </TouchableOpacity>
+            </View>
+
+            <TextInput
+              style={{color: 'white'}}
+              placeholder="apap"
+              onChangeText={(taks) => this.setState({dibayar: taks})}
+              keyboardType="number-pad"
+            />
+            <View style={styles.klikBayar}>
+              <TouchableNativeFeedback
+                onPress={() => this.setState({modal: true})}>
+                {this.state.loading1 ? (
+                  <ActivityIndicator size={30} color="white" />
+                ) : (
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color: 'white',
+                      padding: 5,
+                    }}>
+                    Bayar
+                  </Text>
+                )}
+              </TouchableNativeFeedback>
+            </View>
           </View>
         </Modal>
       </View>

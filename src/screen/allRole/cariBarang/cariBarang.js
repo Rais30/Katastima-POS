@@ -107,7 +107,7 @@ export class cariBarang extends Component {
         if (kode_transaksi != null) {
           console.log('ini respon : ', resjson);
           this.setState({loading1: false, modal: false});
-          this.props.navigation.navigate('RumahKasir');
+          this.props.navigation.navigate('TabRumah');
         } else {
           console.log('ini adalah res else nya : ', resjson);
           this.setState({loading1: false, modal: false});
