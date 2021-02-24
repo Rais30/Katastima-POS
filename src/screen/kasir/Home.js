@@ -9,9 +9,8 @@ import {
   Modal,
   ScrollView,
   ToastAndroid,
+  ActivityIndicator,
 } from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {ActivityIndicator} from 'react-native-paper';
 import styles from '../../assets/style/boxKasir/boxHomeKasir/index';
 
 export class Home extends Component {
@@ -36,6 +35,7 @@ export class Home extends Component {
       dataPembanyaran: '',
       jumlah: '',
       modal: false,
+      modalError: false,
     };
   }
   Member = () => {
@@ -138,6 +138,7 @@ export class Home extends Component {
       });
   };
   Pembanyaran = () => {
+    console.log('mulai pembanyaran');
     const {
       token,
       penjualan_id,
@@ -182,11 +183,11 @@ export class Home extends Component {
           console.log('orang kere ', resjson);
           this.setState({
             pesan: resjson.message,
-            modalPembanyaran: true,
+            modalError: true,
             loading1: false,
           });
           ToastAndroid.show(
-            ' Dana anda tidak Cukup ',
+            ' Uang anda tidak Cukup ',
             ToastAndroid.SHORT,
             ToastAndroid.CENTER,
           );
@@ -337,37 +338,39 @@ export class Home extends Component {
                 justifyContent: 'space-around',
                 flexDirection: 'row',
               }}>
-              <TouchableOpacity
-                style={{
-                  margin: 10,
-                  backgroundColor: 'blue',
-                  padding: 5,
-                  borderRadius: 10,
-                }}
+              <TouchableNativeFeedback
                 onPress={() => this.setState({jenis_pembayaran: 'tunai'})}>
-                <Text style={{fontSize: 20, color: 'white'}}>Tunai</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  margin: 10,
-                  backgroundColor: 'blue',
-                  padding: 5,
-                  borderRadius: 10,
-                }}
+                <View
+                  style={{
+                    margin: 10,
+                    backgroundColor: 'blue',
+                    padding: 5,
+                    borderRadius: 10,
+                  }}>
+                  <Text style={{fontSize: 20, color: 'white'}}>Tunai</Text>
+                </View>
+              </TouchableNativeFeedback>
+              <TouchableNativeFeedback
                 onPress={() => this.setState({jenis_pembayaran: 'debit'})}>
-                <Text style={{fontSize: 20, color: 'white'}}>Debit</Text>
-              </TouchableOpacity>
+                <View
+                  style={{
+                    margin: 10,
+                    backgroundColor: 'blue',
+                    padding: 5,
+                    borderRadius: 10,
+                  }}>
+                  <Text style={{fontSize: 20, color: 'white'}}>Debit</Text>
+                </View>
+              </TouchableNativeFeedback>
             </View>
 
             <TextInput
-              style={{color: 'white'}}
               placeholder="apap"
               onChangeText={(taks) => this.setState({dibayar: taks})}
               keyboardType="number-pad"
             />
             <View style={styles.klikBayar}>
-              <TouchableNativeFeedback
-                onPress={() => this.setState({modal: true})}>
+              <TouchableNativeFeedback onPress={() => this.Pembanyaran()}>
                 {this.state.loading1 ? (
                   <ActivityIndicator size={30} color="white" />
                 ) : (
@@ -383,6 +386,15 @@ export class Home extends Component {
                 )}
               </TouchableNativeFeedback>
             </View>
+          </View>
+        </Modal>
+        <Modal
+          visible={this.state.modalError}
+          animationType="fade"
+          onRequestClose={() => this.setState({modalError: false})}
+          transparent>
+          <View style={{flex: 1, backgroundColor: 'white'}}>
+            <Text> {this.state.pesan}</Text>
           </View>
         </Modal>
       </View>
