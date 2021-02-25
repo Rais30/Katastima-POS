@@ -10,7 +10,9 @@ import {
   ScrollView,
   ToastAndroid,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
+import styles1 from '../../assets/style/boxAllRole/boxCari/boxCari';
 import styles from '../../assets/style/boxKasir/boxHomeKasir/index';
 
 export class Home extends Component {
@@ -36,44 +38,26 @@ export class Home extends Component {
       jumlah: '',
       modal: false,
       modalError: false,
+      dataInput: '',
+      namaMember: '',
+      saldoMember: '',
     };
   }
   Member = () => {
-    return (
-      <View style={styles.boxDataMember}>
-        <View style={styles.dataMember}>
-          <Text>Nama : </Text>
-          <Text> Rais azaria </Text>
+    if (this.state.member_id != null) {
+      return (
+        <View>
+          <View>
+            <View style={styles.boxDataMap}>
+              <Text>{'Nama : ' + this.state.namaMember}</Text>
+              <Text>{'Saldo : ' + this.state.saldoMember}</Text>
+            </View>
+          </View>
         </View>
-        <View style={styles.dataMember}>
-          <Text>Alamat : </Text>
-          <Text> DI Yogyakarta </Text>
-        </View>
-        <View style={styles.dataMember}>
-          <Text>Email : </Text>
-          <Text> email@gmail.com </Text>
-        </View>
-        <View style={styles.dataMember}>
-          <Text>Saldo : </Text>
-          <Text> Rp.1.000.000,- </Text>
-        </View>
-        <View style={styles.dataMember}>
-          <Text>Diskon : </Text>
-          <Text> 10 % </Text>
-        </View>
-        <TouchableNativeFeedback
-          onPress={() => this.setState({dataMember: this.state.dataKosong})}>
-          <Image
-            style={{
-              ...styles.Icon,
-              margin: 10,
-              backgroundColor: 'red',
-            }}
-            source={require('../../assets/logoAplikasi/pngaaa.com-607749.png')}
-          />
-        </TouchableNativeFeedback>
-      </View>
-    );
+      );
+    } else {
+      return <View></View>;
+    }
   };
   Barang = () => {
     return (
@@ -82,10 +66,7 @@ export class Home extends Component {
           return (
             <View style={{flexDirection: 'row'}} key={key}>
               <View style={styles.dataBarang}>
-                <Text> {val.id} </Text>
-              </View>
-              <View style={styles.dataBarang}>
-                <Text> {val.nama}</Text>
+                <Text> {val.nama_product}</Text>
               </View>
               <View style={styles.dataBarang}>
                 <Text> {val.harga_jual}</Text>
@@ -110,7 +91,7 @@ export class Home extends Component {
     console.log('mulai penjualan');
     const {token} = this.state;
     const url = `https://katastima-pos.herokuapp.com/api/kasir/penjualan/form`;
-    this.setState({loading1: true});
+    this.setState({loading: true});
 
     fetch(url, {
       method: 'GET',
@@ -126,15 +107,16 @@ export class Home extends Component {
         this.setState({
           penjualan_id: data.id,
           dataBarang: data.detail_penjualan,
-          loading1: false,
+          loading: false,
           jumlah: data.total_price,
         });
-
+        // this.setState({loading:false})
+        this.Member();
         console.log('barang ', resjson);
       })
       .catch((error) => {
         console.log('ini ada error', error);
-        this.setState({loading1: false, dataInput: this.state.kosong});
+        this.setState({loading: false, dataInput: this.state.kosong});
       });
   };
   Pembanyaran = () => {
@@ -201,7 +183,31 @@ export class Home extends Component {
         console.log('error adalah ' + error);
       });
   };
-
+  CariMember() {
+    console.log('get  barang');
+    const {token, dataInput} = this.state;
+    const q = dataInput !== '' ? `/${dataInput}` : '';
+    const url = `https://katastima-pos.herokuapp.com/api/kasir/member/cari${q}`;
+    this.setState({loading: true});
+    console.log(token);
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((resjson) => {
+        this.setState({dataMember: resjson, loading: false});
+        console.log('ini respon cari member ', resjson);
+      })
+      .catch((error) => {
+        console.log('ini ada error', error);
+        this.setState({loading: false, dataInput: this.state.kosong});
+      });
+  }
   componentDidMount() {
     AsyncStorage.getItem('token').then((token) => {
       if (token) {
@@ -229,11 +235,15 @@ export class Home extends Component {
         </View>
         {this.state.penjualan_id == '' ? (
           <View style={{...styles.boxInputMember, alignSelf: 'center'}}>
-            <TouchableNativeFeedback onPress={() => this.GetPenjualan()}>
-              <Text style={{fontSize: 20, color: 'white', padding: 5}}>
-                Mulai Penjualan
-              </Text>
-            </TouchableNativeFeedback>
+            {this.state.loading ? (
+              <ActivityIndicator size={30} color="white" />
+            ) : (
+              <TouchableNativeFeedback onPress={() => this.GetPenjualan()}>
+                <Text style={{fontSize: 20, color: 'white', padding: 5}}>
+                  Mulai Penjualan
+                </Text>
+              </TouchableNativeFeedback>
+            )}
           </View>
         ) : (
           <ScrollView style={styles.utama}>
@@ -253,7 +263,7 @@ export class Home extends Component {
                 </TouchableNativeFeedback>
               )}
             </View>
-            <ScrollView>
+            <ScrollView horizontal>
               {this.state.dataBarang == '' ? (
                 <View></View>
               ) : (
@@ -261,23 +271,18 @@ export class Home extends Component {
               )}
             </ScrollView>
             <View style={{flexDirection: 'row', padding: 5}}></View>
-            <View style={styles.boxInputMember}>
-              <TextInput
-                placeholder="Member"
-                onChangeText={(taks) =>
-                  this.setState({
-                    data: taks,
-                  })
-                }
-              />
-              <TouchableNativeFeedback
-                onPress={() => this.setState({modalMember: true})}>
+            <TouchableNativeFeedback
+              onPress={() => this.setState({modalMember: true})}>
+              <View style={{...styles.boxInputMember, alignItems: 'center'}}>
+                <Text style={{fontSize: 20, color: 'white', padding: 5}}>
+                  Member
+                </Text>
                 <Image
                   style={{...styles.Icon, margin: 10}}
                   source={require('../../assets/logoAplikasi/pngaaa.com-607749.png')}
                 />
-              </TouchableNativeFeedback>
-            </View>
+              </View>
+            </TouchableNativeFeedback>
             {this.state.dataMember == '' ? (
               <View></View>
             ) : (
@@ -310,7 +315,54 @@ export class Home extends Component {
           onRequestClose={() => this.setState({modalMember: false})}
           transparent>
           <View style={{flex: 1, backgroundColor: 'white'}}>
-            {this.Member()}
+            <View style={styles1.boxInput}>
+              <TextInput
+                style={{flex: 1}}
+                placeholder="Member"
+                onChangeText={(taks) => this.setState({dataInput: taks})}
+              />
+              <TouchableOpacity onPress={(taks) => this.CariMember()}>
+                <Image
+                  source={require('../../assets/logoAplikasi/pngaaa.com-607749.png')}
+                  style={styles1.Icon}
+                />
+              </TouchableOpacity>
+            </View>
+            <ScrollView>
+              {this.state.dataMember == null ? (
+                <View>
+                  {loading ? (
+                    <View></View>
+                  ) : (
+                    <ActivityIndicator size={50} color="red" />
+                  )}
+                </View>
+              ) : (
+                <View>
+                  {this.state.dataMember.map((val, key) => {
+                    return (
+                      <View key={key}>
+                        <TouchableNativeFeedback
+                          onPress={() =>
+                            this.setState({
+                              member_id: val.id,
+                              namaMember: val.nama,
+                              saldoMember: val.saldo,
+                            })
+                          }>
+                          <View style={styles.boxDataMap}>
+                            <Text>{'Kode : ' + val.kode_member}</Text>
+                            <Text>{'Nama : ' + val.nama}</Text>
+                            <Text>{'Saldo : ' + val.saldo}</Text>
+                            <Text>{'No Telephone : ' + val.no_telephone}</Text>
+                          </View>
+                        </TouchableNativeFeedback>
+                      </View>
+                    );
+                  })}
+                </View>
+              )}
+            </ScrollView>
           </View>
         </Modal>
         <Modal

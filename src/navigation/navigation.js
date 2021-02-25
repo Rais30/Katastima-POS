@@ -15,6 +15,8 @@ import Password from '../screen/allRole/Update/Password';
 import RegisMember from '../screen/kasir/RegisMember';
 import Respon from '../screen/allRole/BoxRespos/Respon';
 import TabRumah from '../screen/kasir/navigationKasir/navigationBottom';
+import TopUp from '../screen/kasir/TopUp';
+import Member from '../screen/kasir/CariMember';
 
 const Stack = createStackNavigator();
 
@@ -40,6 +42,8 @@ const Navigation = () => {
         <Stack.Screen name="RegisMember" component={RegisMember} />
         <Stack.Screen name="Respon" component={Respon} />
         <Stack.Screen name="TabRumah" component={TabRumah} />
+        <Stack.Screen name="TopUp" component={TopUp} />
+        <Stack.Screen name="CariMember" component={Member} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -41,4 +41,10 @@ export default StyleSheet.create({
     padding: 5,
     alignItems: 'center',
   },
+  boxDataMap: {
+    padding: 10,
+    margin: 5,
+    borderRadius: 3,
+    backgroundColor: 'white',
+  },
 });
