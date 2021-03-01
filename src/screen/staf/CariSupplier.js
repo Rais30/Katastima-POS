@@ -12,9 +12,9 @@ import {
   Modal,
 } from 'react-native';
 
-import styles from '../../assets/style/boxAllRole/boxCari/boxCari';
+import styles from '../../../assets/style/boxAllRole/boxCari/boxCari';
 
-export class Gudang extends Component {
+export class cariBarang extends Component {
   constructor() {
     super();
     this.state = {
@@ -25,9 +25,8 @@ export class Gudang extends Component {
       token: '',
       modal: false,
       kosong: '',
-      jBarang: 0,
+      id_staf: '',
       idBarang: '',
-      penjualan_id: '',
     };
   }
 
@@ -35,7 +34,7 @@ export class Gudang extends Component {
     console.log('get  barang');
     const {token, dataInput} = this.state;
     const q = dataInput !== '' ? `/${dataInput}` : '';
-    const url = `https://katastima-pos.herokuapp.com/api/cari-barang${q}`;
+    const url = `https://katastima-pos.herokuapp.com/api/staff/cari-supplier${q}`;
     this.setState({loading: true});
     console.log(token);
     fetch(url, {
@@ -60,7 +59,7 @@ export class Gudang extends Component {
     console.log('get  barang');
     const {token, dataInput} = this.state;
     const q = dataInput !== '' ? `/${dataInput}` : '';
-    const url = `https://katastima-pos.herokuapp.com/api/cari-barang${q}`;
+    const url = `https://katastima-pos.herokuapp.com/api/staff/cari-supplier${q}`;
     this.setState({loading: true});
     console.log(token);
     fetch(url, {
@@ -81,41 +80,30 @@ export class Gudang extends Component {
         this.setState({loading: false, dataInput: this.state.kosong});
       });
   };
-  TambahBatang = () => {
+  TambahStaf = () => {
     console.log('get  barang');
-    const {token, jBarang, idBarang, penjualan_id} = this.state;
-    const data = {
-      product_id: idBarang,
-      quantity: jBarang,
-      penjualan_id: penjualan_id,
-    };
-    const url = `https://katastima-pos.herokuapp.com/api/kasir/penjualan/create-detail`;
-    this.setState({loading1: true});
+    const {token, id_staf} = this.state;
+    const q = id_staf !== '' ? `/${id_staf}` : '';
+    const url = `https://katastima-pos.herokuapp.com/api/staff/pembelian/form${q}`;
+    this.setState({loading: true});
     console.log(token);
     fetch(url, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(data),
     })
       .then((res) => res.json())
       .then((resjson) => {
-        const {kode_transaksi} = resjson;
-        if (kode_transaksi != null) {
-          console.log('ini respon : ', resjson);
-          this.setState({loading1: false, modal: false});
-          this.props.navigation.navigate('TabRumah');
-        } else {
-          console.log('ini adalah res else nya : ', resjson);
-          this.setState({loading1: false, modal: false});
-        }
+        this.setState({dataMap: resjson, loading: false});
+        console.log('ini adalah staf : ', resjson);
+        this.props.navigation.navigate('TabRumahStaf');
       })
       .catch((error) => {
         console.log('ini ada error', error);
-        this.setState({loading1: false, modal: false});
+        this.setState({loading: false, dataInput: this.state.kosong});
       });
   };
   componentDidMount() {
@@ -123,20 +111,13 @@ export class Gudang extends Component {
       if (token) {
         this.setState({token: token});
         console.log(this.state.token);
-        this.setState({penjualan_id: this.props.route.params.id});
-        console.log('ini di penjualan : ', this.state.penjualan_id);
+
         this.GetBarang1();
       } else {
         console.log('tidak ada token');
       }
     });
   }
-  Tambah = () => {
-    this.setState({jBarang: this.state.jBarang + 1});
-  };
-  Kurang = () => {
-    this.setState({jBarang: this.state.jBarang - 1});
-  };
   render() {
     return (
       <View style={styles.utama}>
@@ -150,7 +131,7 @@ export class Gudang extends Component {
             <TouchableNativeFeedback onPress={() => this.GetBarang()}>
               <Image
                 style={styles.Icon}
-                source={require('../../assets/logoAplikasi/pngaaa.com-607749.png')}
+                source={require('../../../assets/logoAplikasi/pngaaa.com-607749.png')}
               />
             </TouchableNativeFeedback>
           </View>
@@ -169,14 +150,9 @@ export class Gudang extends Component {
                           this.setState({modal: true, idBarang: val.id})
                         }>
                         <View style={styles.boxDataMap}>
-                          <Text>{'Kode Barang : ' + val.UID}</Text>
-                          <Text>{'nama : ' + val.nama}</Text>
-                          <Text>{'merek : ' + val.merek}</Text>
-                          <Text>{'stok : ' + val.stok}</Text>
-                          <View style={styles.sty}>
-                            <Text>{'harga : Rp.' + val.harga_jual}</Text>
-                            <Text>{'diskon : Rp.' + val.diskon}</Text>
-                          </View>
+                          <Text>{'Nama : ' + val.nama_supplier}</Text>
+                          <Text>{'Alamat : ' + val.alamat_supplier}</Text>
+                          <Text>{'Telephone : ' + val.telepon_supplier}</Text>
                         </View>
                       </TouchableNativeFeedback>
                     </View>
@@ -197,28 +173,12 @@ export class Gudang extends Component {
                 alignItems: 'center',
               }}>
               <View style={styles.modal}>
-                <View style={{...styles.sty, justifyContent: 'space-between'}}>
-                  <Text> Jumlah Barang : </Text>
-                  <Text>{this.state.jBarang}</Text>
-                </View>
-                <View style={styles.sty}>
-                  <TouchableOpacity
-                    onPress={() => this.Tambah()}
-                    style={{...styles.tombol, backgroundColor: 'green'}}>
-                    <Text>T</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => this.Kurang()}
-                    style={{...styles.tombol, backgroundColor: 'red'}}>
-                    <Text>K</Text>
-                  </TouchableOpacity>
-                </View>
-                <TouchableNativeFeedback onPress={() => this.TambahBatang()}>
+                <TouchableNativeFeedback onPress={() => this.TambahStaf()}>
                   {this.state.loading1 ? (
-                    <ActivityIndicator size={30} color="white" />
+                    <ActivityIndicator size={30} color="blue" />
                   ) : (
                     <View style={styles.tombol}>
-                      <Text style={styles.taksTombol}> Tambah </Text>
+                      <Text style={styles.taksTombol}> Get Supplier </Text>
                     </View>
                   )}
                 </TouchableNativeFeedback>
@@ -231,4 +191,4 @@ export class Gudang extends Component {
   }
 }
 
-export default Gudang;
+export default cariBarang;

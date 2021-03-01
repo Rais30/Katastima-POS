@@ -61,7 +61,7 @@ export class Home extends Component {
   };
   Barang = () => {
     return (
-      <View>
+      <View style={{margin: 10, padding: 10}}>
         {this.state.dataBarang.map((val, key) => {
           return (
             <View style={{flexDirection: 'row'}} key={key}>
@@ -87,10 +87,11 @@ export class Home extends Component {
       </View>
     );
   };
-  GetPenjualan = () => {
+  GetPenjualan() {
     console.log('mulai penjualan');
-    const {token} = this.state;
-    const url = `https://katastima-pos.herokuapp.com/api/kasir/penjualan/form`;
+    const {token, member_id} = this.state;
+    const q = member_id !== '' ? `/${member_id}` : '';
+    const url = `https://katastima-pos.herokuapp.com/api/kasir/penjualan/form${q}`;
     this.setState({loading: true});
 
     fetch(url, {
@@ -118,7 +119,7 @@ export class Home extends Component {
         console.log('ini ada error', error);
         this.setState({loading: false, dataInput: this.state.kosong});
       });
-  };
+  }
   Pembanyaran = () => {
     console.log('mulai pembanyaran');
     const {
@@ -255,6 +256,7 @@ export class Home extends Component {
                   onPress={() =>
                     this.props.navigation.navigate('Cari', {
                       id: this.state.penjualan_id,
+                      pesan: 'kasir',
                     })
                   }>
                   <Text style={{fontSize: 20, color: 'white', padding: 5}}>

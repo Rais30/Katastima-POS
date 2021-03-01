@@ -1,14 +1,14 @@
 import * as React from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 
-import gudang from '../gudang';
+import Gudang from '../gudang';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Tap from '../Tap';
 
 const Tab = createMaterialBottomTabNavigator();
 
-function TabRumah() {
+function TabRumahStaf() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -35,8 +35,8 @@ function TabRumah() {
         component={Tap}
       />
 
-      <Tab.Screen name="LtPenjualan" component={gudang} />
+      <Tab.Screen name="LtPenjualan" component={Gudang} />
     </Tab.Navigator>
   );
 }
-export default TabRumah;
+export default TabRumahStaf;

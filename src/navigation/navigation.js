@@ -17,6 +17,7 @@ import Respon from '../screen/allRole/BoxRespos/Respon';
 import TabRumah from '../screen/kasir/navigationKasir/navigationBottom';
 import TopUp from '../screen/kasir/TopUp';
 import Member from '../screen/kasir/CariMember';
+import TabRumahStaf from '../screen/staf/Navigation/navigationStaff';
 
 const Stack = createStackNavigator();
 
@@ -44,6 +45,7 @@ const Navigation = () => {
         <Stack.Screen name="TabRumah" component={TabRumah} />
         <Stack.Screen name="TopUp" component={TopUp} />
         <Stack.Screen name="CariMember" component={Member} />
+        <Stack.Screen name="TabRumahStaf" component={TabRumahStaf} />
       </Stack.Navigator>
     </NavigationContainer>
   );

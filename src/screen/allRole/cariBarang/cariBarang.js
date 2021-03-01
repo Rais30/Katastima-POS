@@ -28,6 +28,7 @@ export class cariBarang extends Component {
       jBarang: 0,
       idBarang: '',
       penjualan_id: '',
+      hargaBeli: '',
     };
   }
 
@@ -89,8 +90,13 @@ export class cariBarang extends Component {
       quantity: jBarang,
       penjualan_id: penjualan_id,
     };
+
+    console.log(penjualan_id);
+
     const url = `https://katastima-pos.herokuapp.com/api/kasir/penjualan/create-detail`;
+
     this.setState({loading1: true});
+    console.log('ini dari : ', this.props.route.params.pesan);
     console.log(token);
     fetch(url, {
       method: 'POST',
@@ -138,64 +144,66 @@ export class cariBarang extends Component {
     this.setState({jBarang: this.state.jBarang - 1});
   };
   render() {
+    const pesan = this.props.route.params.pesan;
+    console.log('ini pesan', pesan);
     return (
       <View style={styles.utama}>
-        <View>
-          <View style={styles.boxInput}>
-            <TextInput
-              style={{flex: 1}}
-              placeholder="Pencarian"
-              onChangeText={(taks) => this.setState({dataInput: taks})}
+        <View style={styles.boxInput}>
+          <TextInput
+            style={{flex: 1}}
+            placeholder="Pencarian"
+            onChangeText={(taks) => this.setState({dataInput: taks})}
+          />
+          <TouchableNativeFeedback onPress={() => this.GetBarang()}>
+            <Image
+              style={styles.Icon}
+              source={require('../../../assets/logoAplikasi/pngaaa.com-607749.png')}
             />
-            <TouchableNativeFeedback onPress={() => this.GetBarang()}>
-              <Image
-                style={styles.Icon}
-                source={require('../../../assets/logoAplikasi/pngaaa.com-607749.png')}
-              />
-            </TouchableNativeFeedback>
-          </View>
-          <ScrollView>
-            {this.state.dataMap == '' ? (
-              <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <ActivityIndicator size={50} color="blue" />
-              </View>
-            ) : (
-              <View>
-                {this.state.dataMap.map((val, key) => {
-                  return (
-                    <View key={key}>
-                      <TouchableNativeFeedback
-                        onPress={() =>
-                          this.setState({modal: true, idBarang: val.id})
-                        }>
-                        <View style={styles.boxDataMap}>
-                          <Text>{'Kode Barang : ' + val.UID}</Text>
-                          <Text>{'nama : ' + val.nama}</Text>
-                          <Text>{'merek : ' + val.merek}</Text>
-                          <Text>{'stok : ' + val.stok}</Text>
-                          <View style={styles.sty}>
-                            <Text>{'harga : Rp.' + val.harga_jual}</Text>
-                            <Text>{'diskon : Rp.' + val.diskon}</Text>
-                          </View>
+          </TouchableNativeFeedback>
+        </View>
+        <ScrollView>
+          {this.state.dataMap == '' ? (
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+              <ActivityIndicator size={50} color="blue" />
+            </View>
+          ) : (
+            <View>
+              {this.state.dataMap.map((val, key) => {
+                return (
+                  <View key={key}>
+                    <TouchableNativeFeedback
+                      onPress={() =>
+                        this.setState({modal: true, idBarang: val.id})
+                      }>
+                      <View style={styles.boxDataMap}>
+                        <Text>{'Kode Barang : ' + val.UID}</Text>
+                        <Text>{'nama : ' + val.nama}</Text>
+                        <Text>{'merek : ' + val.merek}</Text>
+                        <Text>{'stok : ' + val.stok}</Text>
+                        <View style={styles.sty}>
+                          <Text>{'harga : Rp.' + val.harga_jual}</Text>
+                          <Text>{'diskon : Rp.' + val.diskon}</Text>
                         </View>
-                      </TouchableNativeFeedback>
-                    </View>
-                  );
-                })}
-              </View>
-            )}
-          </ScrollView>
-          <Modal
-            visible={this.state.modal}
-            transparent
-            animationType="slide"
-            onRequestClose={() => this.setState({modal: false})}>
-            <View
-              style={{
-                ...styles.utama,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
+                      </View>
+                    </TouchableNativeFeedback>
+                  </View>
+                );
+              })}
+            </View>
+          )}
+        </ScrollView>
+        <Modal
+          visible={this.state.modal}
+          transparent
+          animationType="slide"
+          onRequestClose={() => this.setState({modal: false})}>
+          <View
+            style={{
+              ...styles.utama,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            {pesan == 'satf' ? (
               <View style={styles.modal}>
                 <View style={{...styles.sty, justifyContent: 'space-between'}}>
                   <Text> Jumlah Barang : </Text>
@@ -223,9 +231,37 @@ export class cariBarang extends Component {
                   )}
                 </TouchableNativeFeedback>
               </View>
-            </View>
-          </Modal>
-        </View>
+            ) : (
+              <View style={styles.modal}>
+                <View style={{...styles.sty, justifyContent: 'space-between'}}>
+                  <Text> Jumlah Barang : </Text>
+                  <Text>{this.state.jBarang}</Text>
+                </View>
+                <View style={styles.sty}>
+                  <TouchableOpacity
+                    onPress={() => this.Tambah()}
+                    style={{...styles.tombol, backgroundColor: 'green'}}>
+                    <Text>T</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => this.Kurang()}
+                    style={{...styles.tombol, backgroundColor: 'red'}}>
+                    <Text>K</Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableNativeFeedback onPress={() => this.TambahBatang()}>
+                  {this.state.loading1 ? (
+                    <ActivityIndicator size={30} color="white" />
+                  ) : (
+                    <View style={styles.tombol}>
+                      <Text style={styles.taksTombol}> Tambah </Text>
+                    </View>
+                  )}
+                </TouchableNativeFeedback>
+              </View>
+            )}
+          </View>
+        </Modal>
       </View>
     );
   }
