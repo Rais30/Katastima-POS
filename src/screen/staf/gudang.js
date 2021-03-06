@@ -48,8 +48,8 @@ export class Gudang extends Component {
     })
       .then((res) => res.json())
       .then((resjson) => {
-        this.setState({dataMap: resjson, loading: false});
-        console.log('barang ', resjson);
+        this.setState({dataMap: resjson.data, loading: false});
+        console.log('barang ', resjson.data);
       })
       .catch((error) => {
         console.log('ini ada error', error);
@@ -73,8 +73,8 @@ export class Gudang extends Component {
     })
       .then((res) => res.json())
       .then((resjson) => {
-        this.setState({dataMap: resjson, loading: false});
-        console.log('barang ', resjson);
+        this.setState({dataMap: resjson.data, loading: false});
+        console.log('barang ', resjson.data);
       })
       .catch((error) => {
         console.log('ini ada error', error);
@@ -182,6 +182,7 @@ export class Gudang extends Component {
                     </View>
                   );
                 })}
+                {/* <Text>oke</Text> */}
               </View>
             )}
           </ScrollView>

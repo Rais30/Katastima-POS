@@ -73,6 +73,9 @@ export class Password extends Component {
           } else if (role == 'pemimpin') {
             console.log(role, 'masuk ke aplikasi');
             this.props.navigation.replace('Rumah4');
+          } else if (role == 'admin') {
+            console.log(role, 'masuk ke aplikasi');
+            this.props.navigation.replace('admin');
           } else {
             console.log('anda orang asing masuk ke aplikasi');
           }

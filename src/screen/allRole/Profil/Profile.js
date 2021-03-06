@@ -82,6 +82,21 @@ export class Profil extends Component {
     AsyncStorage.clear();
     this.props.navigation.replace('Splash');
   };
+  admin = (role) => {
+    return (
+      <>
+        {role != 'admin' ? (
+          <View></View>
+        ) : (
+          <TouchableOpacity
+            style={styles.klikFitur}
+            onPress={() => this.props.navigation.navigate('UpToko')}>
+            <Text style={styles.taksfFitur}> Update Toko </Text>
+          </TouchableOpacity>
+        )}
+      </>
+    );
+  };
 
   render() {
     return (
@@ -120,11 +135,12 @@ export class Profil extends Component {
                   onPress={() => this.props.navigation.navigate('Password')}>
                   <Text style={styles.taksfFitur}> Ubah Password </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.klikFitur}>
+                {/* <TouchableOpacity style={styles.klikFitur}>
                   <OpenURLButton url={this.state.url}>
                     Lupa Password
                   </OpenURLButton>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                {this.admin(this.state.role)}
               </View>
               <View style={styles.tombol}>
                 <TouchableNativeFeedback onPress={() => this.LogOut()}>

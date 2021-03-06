@@ -21,8 +21,12 @@ export class Splash extends Component {
           } else if (role == 'pimpinan') {
             console.log(role, 'masuk ke aplikasi');
             this.props.navigation.replace('Rumah4');
+          } else if (role == 'admin') {
+            console.log(id, 'yang masuk');
+            this.props.navigation.replace('Rumah5');
           } else {
             console.log('anda orang asing masuk ke aplikasi');
+            this.props.navigation.replace('AllRolle');
           }
         });
       } else {

@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
+import styles from '../../assets/style/boxPimpinan/index';
 
 export class LlabaRugi extends Component {
   render() {
     return (
-      <View>
+      <View style={styles.utama}>
+        <View style={styles.headher} />
+
         <Text> Laporan Laba - Rugi </Text>
       </View>
     );

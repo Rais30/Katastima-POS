@@ -49,8 +49,8 @@ export class cariBarang extends Component {
     })
       .then((res) => res.json())
       .then((resjson) => {
-        this.setState({dataMap: resjson, loading: false});
-        console.log('barang ', resjson);
+        this.setState({dataMap: resjson.data, loading: false});
+        console.log('barang ', resjson.data);
       })
       .catch((error) => {
         console.log('ini ada error', error);
@@ -74,8 +74,8 @@ export class cariBarang extends Component {
     })
       .then((res) => res.json())
       .then((resjson) => {
-        this.setState({dataMap: resjson, loading: false});
-        console.log('barang ', resjson);
+        this.setState({dataMap: resjson.data, loading: false});
+        console.log('barang ', resjson.data);
       })
       .catch((error) => {
         console.log('ini ada error', error);
@@ -176,7 +176,7 @@ export class cariBarang extends Component {
                         this.setState({modal: true, idBarang: val.id})
                       }>
                       <View style={styles.boxDataMap}>
-                        <Text>{'Kode Barang : ' + val.UID}</Text>
+                        <Text>{'Kode Barang : ' + val.uid}</Text>
                         <Text>{'nama : ' + val.nama}</Text>
                         <Text>{'merek : ' + val.merek}</Text>
                         <Text>{'stok : ' + val.stok}</Text>

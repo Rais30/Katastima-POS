@@ -12,42 +12,50 @@ import {
   ScrollView,
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
-import styles from '../../../assets/style/boxAllRole/boxUpdate/Update';
+import styles from '../../assets/style/boxAllRole/boxUpdate/Update';
 
-export class EditProfil extends Component {
+export class UpToko extends Component {
   constructor() {
     super();
     this.state = {
-      visibel: true,
-      name: '',
+      nama_bisnis: '',
       email: '',
-      alamat: '',
-      umur: '',
-      profile_picture: '',
+      alamat_bisnis: '',
+      telepon: '',
+      diskon_member: '',
       loading: false,
       dataUser: '',
       token: '',
       data: '',
       role: '',
-      foto: null,
+      logo_bisnis: null,
     };
   }
 
   EditProfil = () => {
-    const {name, email, alamat, umur, foto, role} = this.state;
+    const {
+      nama_bisnis,
+      email,
+      alamat_bisnis,
+      telepon,
+      logo_bisnis,
+      role,
+      diskon_member,
+    } = this.state;
     const url = 'https://katastima-pos.herokuapp.com/api/profile/update';
     const data = {
-      name: name,
+      nama_bisnis: nama_bisnis,
       email: email,
-      alamat: alamat,
-      umur: umur,
+      alamat_bisnis: alamat_bisnis,
+      telepon: telepon,
+      diskon_member: diskon_member,
       _method: 'PUT',
     };
     this.setState({loading: true});
 
     fetch(url, {
       method: 'POST',
-      body: this.createFormData(foto, data),
+      body: this.createFormData(logo_bisnis, data),
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${this.state.token}`,
@@ -59,30 +67,11 @@ export class EditProfil extends Component {
         const {status} = resJson;
         if (status == 'succes') {
           ToastAndroid.show(
-            'Berasil Di Ubah',
+            'Berasil UPDATE',
             ToastAndroid.SHORT,
             ToastAndroid.CENTER,
           );
-
-          if (role == 'kasir') {
-            console.log(role, 'masuk ke aplikasi');
-            this.props.navigation.replace('Rumah');
-          } else if (role == 'staf') {
-            console.log(role, 'masuk ke aplikasi');
-            this.props.navigation.replace('Rumah3');
-          } else if (role == 'member') {
-            console.log(role, 'masuk ke aplikasi');
-            this.props.navigation.replace('Rumah1');
-          } else if (role == 'pemimpin') {
-            console.log(role, 'masuk ke aplikasi');
-            this.props.navigation.replace('Rumah4');
-          } else if (role == 'admin') {
-            console.log(role, 'masuk ke aplikasi');
-            this.props.navigation.replace('admin');
-          } else {
-            console.log('anda orang asing masuk ke aplikasi');
-          }
-
+          this.props.navigation.replace('admin');
           this.setState({loading: false});
         } else {
           this.setState({loading: false});
@@ -120,26 +109,15 @@ export class EditProfil extends Component {
     };
     ImagePicker.launchImageLibrary(options, (response) => {
       if (response.uri) {
-        this.setState({foto: response});
+        this.setState({logo_bisnis: response});
       }
     });
   };
   componentDidMount() {
     AsyncStorage.getItem('token').then((token) => {
       if (token) {
-        AsyncStorage.getItem('role').then((role) => {
-          console.log('Upadate Profil ', role);
-          this.setState({role: role});
-        });
+        console.log('token ada');
         this.setState({token: token});
-        this.setState({data: this.props.route.params.data});
-        this.setState({
-          name: this.state.data.name,
-          alamat: this.state.data.alamat,
-          email: this.state.data.email,
-          umur: JSON.stringify(this.state.data.umur),
-          profile_picture: this.state.data.profile_picture,
-        });
       } else {
         console.log('tidak ada token');
       }
@@ -147,57 +125,60 @@ export class EditProfil extends Component {
   }
 
   render() {
-    console.log('ini data user', this.props.route.params.data);
     return (
       <View style={styles.utama}>
         <ScrollView>
           <TouchableOpacity
             style={styles.bingkai}
             onPress={() => this.handleChoosePhoto()}>
-            {this.state.foto == null ? (
+            {this.state.logo_bisnis == null ? (
+              <View style={styles.foto}>
+                <Text>Masukan Foto Toko anda</Text>
+              </View>
+            ) : (
               <Image
-                source={{uri: this.state.profile_picture}}
+                source={{uri: this.state.logo_bisnis.uri}}
                 style={styles.foto}
               />
-            ) : (
-              <Image source={{uri: this.state.foto.uri}} style={styles.foto} />
             )}
           </TouchableOpacity>
 
           <View style={styles.boxDataInput}>
             <View>
-              <Text style={styles.taksTitle}>Name :</Text>
+              <Text style={styles.taksTitle}>Name Toko :</Text>
               <View>
                 <TextInput
-                  value={this.state.name}
-                  onChangeText={(taks) => this.setState({name: taks})}
+                  placeholder="Nama Toko"
+                  onChangeText={(taks) => this.setState({nama_bisnis: taks})}
                 />
               </View>
             </View>
             <View>
-              <Text style={styles.taksTitle}>Alamat :</Text>
+              <Text style={styles.taksTitle}>Alamat Toko :</Text>
               <View>
                 <TextInput
-                  value={this.state.alamat}
-                  onChangeText={(taks) => this.setState({alamat: taks})}
+                  placeholder="Alamat Toko"
+                  onChangeText={(taks) => this.setState({alamat_bisnis: taks})}
                 />
               </View>
             </View>
             <View>
-              <Text style={styles.taksTitle}>Umur :</Text>
+              <Text style={styles.taksTitle}>Nomer Telephone :</Text>
               <View>
                 <TextInput
-                  value={this.state.umur}
-                  onChangeText={(taks) => this.setState({umur: taks})}
+                  placeholder="No Telephone"
+                  keyboardType="number-pad"
+                  onChangeText={(taks) => this.setState({telepon: taks})}
                 />
               </View>
             </View>
             <View>
-              <Text style={styles.taksTitle}>Email :</Text>
+              <Text style={styles.taksTitle}>Diskon Member :</Text>
               <View>
                 <TextInput
-                  value={this.state.email}
-                  onChangeText={(taks) => this.setState({email: taks})}
+                  placeholder=" 0% "
+                  onChangeText={(taks) => this.setState({diskon_member: taks})}
+                  keyboardType="number-pad"
                 />
               </View>
             </View>
@@ -217,4 +198,4 @@ export class EditProfil extends Component {
   }
 }
 
-export default EditProfil;
+export default UpToko;

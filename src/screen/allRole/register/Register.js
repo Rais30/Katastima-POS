@@ -90,13 +90,13 @@ export class LogIn extends Component {
       .then((respon) => respon.json())
       .then((resJson) => {
         console.log('apa ini respon', resJson);
-        if (resJson.status == 'success') {
+        if (resJson.token != null) {
           ToastAndroid.show(
             ' Anda Telah TerDaftar',
             ToastAndroid.SHORT,
             ToastAndroid.CENTER,
             // console.log(resJson),
-            this.alert(),
+            // this.alert(),
             this.setState({loading: false}),
             this.props.navigation.navigate('LogIn'),
           );

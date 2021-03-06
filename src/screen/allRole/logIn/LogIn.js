@@ -70,7 +70,7 @@ export class LogIn extends Component {
     }
   };
 
-  role_id = (id) => {
+  role_id = (id, respon) => {
     if (id == 'kasir') {
       console.log(id, 'yang masuk');
       this.props.navigation.replace('Rumah');
@@ -83,8 +83,13 @@ export class LogIn extends Component {
     } else if (id == 'member') {
       console.log(id, 'yang masuk');
       this.props.navigation.replace('Rumah1');
+    } else if (id == 'admin') {
+      console.log(id, 'yang masuk');
+      this.props.navigation.replace('Rumah5');
     } else {
+      console.log(respon);
       console.log('ada orang lain asing masuk');
+      this.props.navigation.replace('AllRolle');
     }
   };
 
@@ -117,7 +122,7 @@ export class LogIn extends Component {
               ToastAndroid.CENTER,
             );
             console.log(' ini role ', resjson.user.role);
-            this.role_id(user.role);
+            this.role_id(user.role, resjson);
             this.setState({loading: false});
           } else {
             this.alert();

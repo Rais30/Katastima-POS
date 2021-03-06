@@ -18,6 +18,10 @@ import TabRumah from '../screen/kasir/navigationKasir/navigationBottom';
 import TopUp from '../screen/kasir/TopUp';
 import Member from '../screen/kasir/CariMember';
 import TabRumahStaf from '../screen/staf/Navigation/navigationStaff';
+import AllRolle from '../screen/allRole/HomeAll/AllRolle';
+import admin from '../screen/admin/admin';
+import UpToko from '../screen/admin/Update';
+import Rumah5 from './navigation5';
 
 const Stack = createStackNavigator();
 
@@ -46,6 +50,10 @@ const Navigation = () => {
         <Stack.Screen name="TopUp" component={TopUp} />
         <Stack.Screen name="CariMember" component={Member} />
         <Stack.Screen name="TabRumahStaf" component={TabRumahStaf} />
+        <Stack.Screen name="AllRolle" component={AllRolle} />
+        <Stack.Screen name="admin" component={admin} />
+        <Stack.Screen name="UpToko" component={UpToko} />
+        <Stack.Screen name="Rumah5" component={Rumah5} />
       </Stack.Navigator>
     </NavigationContainer>
   );
