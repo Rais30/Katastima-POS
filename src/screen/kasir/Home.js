@@ -59,6 +59,26 @@ export class Home extends Component {
       return <View></View>;
     }
   };
+  Hapus = (id) => {
+    console.log('Hapus Barang');
+    const {token} = this.state;
+    const url = `https://katastima-pos.herokuapp.com/api/staff/pembelian/delete-detail/${id}`;
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((resjson) => {
+        console.log('ini respon Dellet', resjson);
+        this.GetPenjualan();
+      })
+      .catch((error) => {
+        console.log('ini ada error Dellet : ', error);
+      });
+  };
   Barang = () => {
     return (
       <View style={{margin: 10, padding: 10}}>
@@ -76,6 +96,11 @@ export class Home extends Component {
               </View>
               <View style={styles.dataBarang}>
                 <Text> {val.subtotal_harga} </Text>
+              </View>
+              <View style={styles.dataBarang}>
+                <TouchableNativeFeedback onPress={() => this.Hapus(val.id)}>
+                  <Text> Hapus </Text>
+                </TouchableNativeFeedback>
               </View>
             </View>
           );

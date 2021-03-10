@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {Component, useCallback} from 'react';
+import React, {Component, useCallback, useState} from 'react';
 import {
   Text,
   View,
@@ -13,6 +13,7 @@ import {
   Alert,
 } from 'react-native';
 import styles from '../../../assets/style/boxAllRole/boxAutentikasi/boxAutentivikasi';
+import CheckBox from '@react-native-community/checkbox';
 
 const OpenURLButton = ({url, children}) => {
   const handlePress = useCallback(async () => {
@@ -43,8 +44,21 @@ export class LogIn extends Component {
       url: 'http://sammpah.herokuapp.com/password/reset',
       urlEmail: 'https://mail.google.com/mail/u/0/#inbox',
       visible: true,
+      checkbox: false,
     };
   }
+
+  componentDidMount() {
+    AsyncStorage.getItem('email').then((value) => {
+      if (value != null) {
+        console.log(value);
+        this.setState({email: value});
+      } else {
+        console.log('tidak ada email');
+      }
+    });
+  }
+
   alert() {
     Alert.alert(
       '',
@@ -114,6 +128,9 @@ export class LogIn extends Component {
         const {token, user} = resjson;
         if (token) {
           if ((user.email_verified_at = !null)) {
+            this.state.checkbox
+              ? AsyncStorage.setItem('email', this.state.email)
+              : console.log('data tidak disimpan');
             AsyncStorage.setItem('token', token);
             AsyncStorage.setItem('role', user.role);
             ToastAndroid.show(
@@ -159,8 +176,8 @@ export class LogIn extends Component {
           <View style={styles.body}>
             <View style={{...styles.boxInput, marginTop: 80}}>
               <TextInput
+                value={this.state.email}
                 style={styles.input}
-                placeholder="Email"
                 onChangeText={(teks) => this.setState({email: teks})}
               />
             </View>
@@ -173,7 +190,14 @@ export class LogIn extends Component {
               />
             </View>
             <View style={styles.boxTeks}>
-              <View>
+              <View style={{flexDirection: 'row'}}>
+                <CheckBox
+                  disabled={false}
+                  value={this.state.checkbox}
+                  onValueChange={() =>
+                    this.setState({checkbox: !this.state.checkbox})
+                  }
+                />
                 <Text style={styles.teksKlik}>RememberMy</Text>
               </View>
               <View>

@@ -89,6 +89,11 @@ export class Home extends Component {
               <View style={styles.dataBarang}>
                 <Text> {val.subtotal_harga} </Text>
               </View>
+              <View style={styles.dataBarang}>
+                <TouchableNativeFeedback onPress={() => this.Hapus(val.id)}>
+                  <Text> Hapus </Text>
+                </TouchableNativeFeedback>
+              </View>
             </View>
           );
         })}
@@ -216,6 +221,7 @@ export class Home extends Component {
       });
   }
   componentDidMount() {
+    console.log('ini dataMap : ', this.state.dataMap);
     AsyncStorage.getItem('token').then((token) => {
       if (token) {
         this.setState({token: token});
@@ -278,7 +284,7 @@ export class Home extends Component {
       });
   };
   GetBarang = () => {
-    console.log('get  barang');
+    console.log('get  barang di staff');
     const {token, Inputbarang} = this.state;
     const q = Inputbarang !== '' ? `/${Inputbarang}` : '';
     const url = `https://katastima-pos.herokuapp.com/api/cari-barang${q}`;
@@ -294,8 +300,8 @@ export class Home extends Component {
     })
       .then((res) => res.json())
       .then((resjson) => {
-        this.setState({dataMap: resjson, loading: false});
-        console.log('barang ', resjson);
+        this.setState({dataMap: resjson.data, loading: false});
+        console.log('barang ', resjson.data);
       })
       .catch((error) => {
         console.log('ini ada error', error);
@@ -307,6 +313,26 @@ export class Home extends Component {
   };
   Kurang = () => {
     this.setState({jBarang: this.state.jBarang - 1});
+  };
+  Hapus = (id) => {
+    console.log('Hapus Barang');
+    const {token} = this.state;
+    const url = `https://katastima-pos.herokuapp.com/api/staff/pembelian/delete-detail/${id}`;
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((resjson) => {
+        console.log('ini respon Dellet', resjson);
+        this.GetPenjualan();
+      })
+      .catch((error) => {
+        console.log('ini ada error Dellet : ', error);
+      });
   };
   render() {
     const {dataPembanyaran} = this.state;
@@ -490,14 +516,8 @@ export class Home extends Component {
               </TouchableOpacity>
             </View>
             <ScrollView>
-              {this.state.dataMap == null ? (
-                <View>
-                  {loading ? (
-                    <View></View>
-                  ) : (
-                    <ActivityIndicator size={50} color="red" />
-                  )}
-                </View>
+              {this.state.dataMap.length == 0 ? (
+                <View></View>
               ) : (
                 <View>
                   {this.state.dataMap.map((val, key) => {

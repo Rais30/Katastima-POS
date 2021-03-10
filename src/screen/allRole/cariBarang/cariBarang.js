@@ -10,8 +10,10 @@ import {
   Image,
   TouchableNativeFeedback,
   Modal,
+  ToastAndroid,
 } from 'react-native';
-
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import {RNCamera} from 'react-native-camera';
 import styles from '../../../assets/style/boxAllRole/boxCari/boxCari';
 
 export class cariBarang extends Component {
@@ -29,9 +31,25 @@ export class cariBarang extends Component {
       idBarang: '',
       penjualan_id: '',
       hargaBeli: '',
+      modalQR: false,
+      kode: '',
     };
   }
-
+  Scan = (coba) => {
+    try {
+      console.log('dataRR==', coba.data);
+      if (coba.data.length >= 8) {
+        ToastAndroid.show(coba.data, ToastAndroid.LONG);
+        this.setState({kode: coba.data});
+        this.setState({dataInput: kode, modalQR: false});
+      } else {
+        ToastAndroid.show('Barcode Salah', ToastAndroid.LONG);
+      }
+      ToastAndroid.show(coba.data, ToastAndroid.LONG);
+    } catch (err) {
+      console.log('Eroro==', err);
+    }
+  };
   GetBarang = () => {
     console.log('get  barang');
     const {token, dataInput} = this.state;
@@ -160,6 +178,13 @@ export class cariBarang extends Component {
               source={require('../../../assets/logoAplikasi/pngaaa.com-607749.png')}
             />
           </TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            onPress={() => this.props.navigation.navigate('ScanScreen')}>
+            <Image
+              style={styles.Icon}
+              source={require('../../../assets/logoAplikasi/pngaaa.com-607749.png')}
+            />
+          </TouchableNativeFeedback>
         </View>
         <ScrollView>
           {this.state.dataMap == '' ? (
@@ -260,6 +285,21 @@ export class cariBarang extends Component {
                 </TouchableNativeFeedback>
               </View>
             )}
+          </View>
+        </Modal>
+        <Modal
+          visible={this.state.modalQR}
+          transparent
+          animationType="slide"
+          onRequestClose={() => this.setstate({modalQR: false})}>
+          <View style={styles.modal}>
+            <QRCodeScanner
+              flashMode={RNCamera.Constants.FlashMode.auto}
+              showMarker
+              vibrate={true}
+              onRead={(coba) => this.Scan(coba)}
+              reactivate
+            />
           </View>
         </Modal>
       </View>

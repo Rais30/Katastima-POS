@@ -49,24 +49,28 @@ export class Shift extends Component {
             start_time: data.start_time,
             end_time: data.end_time,
             transaction_on_shift: data.transaction_on_shift,
+            duration: '',
           });
-          // ToastAndroid.show(
-          //   `${message}`,
-          //   ToastAndroid.SHORT,
-          //   ToastAndroid.CENTER,
-          // );
+          ToastAndroid.show(
+            'Anda sudah memulai shift kerja anda',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
           this.setState({loading: false});
         } else if (status == 'failed') {
           console.log('Cui belum waktu pulang ');
           console.log('ini respon nya 2 :', resJson);
 
-          this.setState({pesan: JSON.stringify(error.message), kode_kasir: ''});
-          // ToastAndroid.show(
-          //   `${res}`,
-          //   ToastAndroid.SHORT,
-          //   ToastAndroid.CENTER,
-          // );
-          console.log(pesan);
+          this.setState({
+            pesan: JSON.stringify(error.message[0]),
+            kode_kasir: '',
+          });
+          ToastAndroid.show(
+            'Anda saat ini dalam shift',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
+
           this.setState({loading: false});
         } else {
           this.setState({loading: false});
@@ -104,13 +108,21 @@ export class Shift extends Component {
             transaction_on_shift: data.transaction_on_shift,
             duration: data.duration,
           });
-          ToastAndroid.show({message}, ToastAndroid.SHORT, ToastAndroid.CENTER);
+          ToastAndroid.show(
+            '"Anda sudah memulai shift kerja anda',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
           this.setState({loading: false});
         } else if (status == 'failed') {
           console.log('Cui belum waktu pulang ');
           console.log('ini respon nya 2 :', resJson);
           this.setState({pesan: error.message[0]});
-          ToastAndroid.show({pesan}, ToastAndroid.SHORT, ToastAndroid.CENTER);
+          ToastAndroid.show(
+            'Belum Waktunya pulang kerja',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
           this.setState({loading: false});
         } else {
           this.setState({loading: false});

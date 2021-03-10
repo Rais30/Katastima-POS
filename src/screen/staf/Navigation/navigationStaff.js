@@ -5,6 +5,7 @@ import Gudang from '../gudang';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Tap from '../Tap';
+import Pengeluaran from '../Pengeluaran';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -21,6 +22,8 @@ function TabRumahStaf() {
             iconName = focused ? 'home' : 'home';
           } else if (route.name === 'LtPenjualan') {
             iconName = focused ? 'history' : 'history';
+          } else if (route.name === 'Pengeluaran') {
+            iconName = focused ? 'history' : 'history';
           }
           return <Icon name={iconName} size={25} color={color} />;
         },
@@ -36,6 +39,7 @@ function TabRumahStaf() {
       />
 
       <Tab.Screen name="LtPenjualan" component={Gudang} />
+      <Tab.Screen name="Pengeluaran" component={Pengeluaran} />
     </Tab.Navigator>
   );
 }

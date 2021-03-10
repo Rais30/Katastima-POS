@@ -79,7 +79,7 @@ export class Profil extends Component {
   }
 
   LogOut = () => {
-    AsyncStorage.clear();
+    AsyncStorage.multiRemove(['token', 'role']);
     this.props.navigation.replace('Splash');
   };
   admin = (role) => {
