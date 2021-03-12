@@ -38,14 +38,9 @@ export class cariBarang extends Component {
   Scan = (coba) => {
     try {
       console.log('dataRR==', coba.data);
-      if (coba.data.length >= 8) {
-        ToastAndroid.show(coba.data, ToastAndroid.LONG);
-        this.setState({kode: coba.data});
-        this.setState({dataInput: kode, modalQR: false});
-      } else {
-        ToastAndroid.show('Barcode Salah', ToastAndroid.LONG);
-      }
       ToastAndroid.show(coba.data, ToastAndroid.LONG);
+      this.setState({dataInput: coba.data, modalQR: false});
+      console.log();
     } catch (err) {
       console.log('Eroro==', err);
     }
@@ -67,12 +62,21 @@ export class cariBarang extends Component {
     })
       .then((res) => res.json())
       .then((resjson) => {
-        this.setState({dataMap: resjson.data, loading: false});
-        console.log('barang ', resjson.data);
+        const {status} = resjson;
+        if (status == 'success') {
+          this.setState({dataMap: resjson.data, loading: false});
+          console.log('barang ', resjson);
+        } else if (status == 'failed') {
+          ToastAndroid.show('barang tidak ada', ToastAndroid.LONG);
+        }
       })
       .catch((error) => {
         console.log('ini ada error', error);
-        this.setState({loading: false, dataInput: this.state.kosong});
+        console.log(resjson);
+        this.setState({
+          loading: false,
+          dataMap: [],
+        });
       });
   };
   GetBarang1 = () => {
@@ -169,7 +173,7 @@ export class cariBarang extends Component {
         <View style={styles.boxInput}>
           <TextInput
             style={{flex: 1}}
-            placeholder="Pencarian"
+            value={this.state.dataInput}
             onChangeText={(taks) => this.setState({dataInput: taks})}
           />
           <TouchableNativeFeedback onPress={() => this.GetBarang()}>
@@ -187,7 +191,7 @@ export class cariBarang extends Component {
           </TouchableNativeFeedback>
         </View>
         <ScrollView>
-          {this.state.dataMap == '' ? (
+          {this.state.dataMap.length <= 0 ? (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <ActivityIndicator size={50} color="blue" />
             </View>

@@ -22,7 +22,6 @@ import AllRolle from '../screen/allRole/HomeAll/AllRolle';
 import admin from '../screen/admin/admin';
 import UpToko from '../screen/admin/Update';
 import Rumah5 from './navigation5';
-import ScanScreen from '../screen/allRole/cariBarang/QrCode';
 
 const Stack = createStackNavigator();
 
@@ -55,7 +54,6 @@ const Navigation = () => {
         <Stack.Screen name="admin" component={admin} />
         <Stack.Screen name="UpToko" component={UpToko} />
         <Stack.Screen name="Rumah5" component={Rumah5} />
-        <Stack.Screen name="ScanScreen" component={ScanScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
