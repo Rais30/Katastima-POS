@@ -18,7 +18,7 @@ export class Tbarang extends Component {
     super();
     this.state = {
       token: '',
-      loangding: false,
+      loading: false,
       modalSupplier: false,
       UID: '',
       merek: '',
@@ -306,16 +306,16 @@ export class Tbarang extends Component {
                 onChangeText={(taks) => this.setState({Inpt: taks})}
               />
               <TouchableOpacity onPress={(taks) => this.CariMember()}>
-                <Image
+                <Image.length
                   source={require('../../assets/logoAplikasi/pngaaa.com-607749.png')}
                   style={styles.Icon}
                 />
               </TouchableOpacity>
             </View>
             <ScrollView>
-              {this.state.dataSup == [] ? (
+              {this.state.dataSup == 0 ? (
                 <View>
-                  {loading ? (
+                  {this.state.loading ? (
                     <View></View>
                   ) : (
                     <ActivityIndicator size={50} color="red" />

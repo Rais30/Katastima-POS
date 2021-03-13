@@ -7,7 +7,10 @@ import {
   TouchableNativeFeedback,
   TextInput,
   TouchableOpacity,
+  Modal,
+  ToastAndroid,
 } from 'react-native';
+import {ActivityIndicator} from 'react-native-paper';
 import styles from '../../assets/style/boxStaff/index';
 
 export class Pengeluaran extends Component {
@@ -15,7 +18,20 @@ export class Pengeluaran extends Component {
     super();
     this.state = {
       token: '',
-      months: '',
+      months: [
+        '01',
+        '02',
+        '03',
+        '04',
+        '05',
+        '06',
+        '07',
+        '08',
+        '09',
+        '10',
+        '11',
+        '12',
+      ],
       month: '',
       date: '',
       year: '',
@@ -24,6 +40,9 @@ export class Pengeluaran extends Component {
       deskripsi: '',
       tanggal: '',
       loading: false,
+      JKeluaran: '',
+      modal: false,
+      dataRes: [],
     };
   }
 
@@ -32,20 +51,22 @@ export class Pengeluaran extends Component {
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
 
-    this.setState({date: date, month: month, year: year});
+    this.setState({
+      date: date,
+      month: month,
+      year: year,
+      tanggal: `${date < 10 ? '0' + date : date}-${
+        month < 10 ? '0' + month : month
+      }-${year}`,
+    });
   };
-  getMonth = () => {
-    return this.state.months
-      .filter((item, index) => this.state.month == index + 1)
-      .map((v, i) => {
-        return this.state.date + ' ' + v + ' ' + this.state.year;
-      });
-  };
+
   componentDidMount() {
     AsyncStorage.getItem('token').then((token) => {
       if (token) {
         this.setState({token: token});
         console.log(this.state.token);
+        this.ShowCurrentDate();
       } else {
         console.log('tidak ada token');
       }
@@ -80,8 +101,19 @@ export class Pengeluaran extends Component {
     })
       .then((res) => res.json())
       .then((respon) => {
-        console.log('ini respon dari laporan : ', respon);
-        this.setState({loading: false});
+        const {tanggal, detail_pengeluaran} = respon;
+        if (tanggal != '') {
+          console.log('ini respon dari laporan : ', respon);
+          this.setState({dataRes: detail_pengeluaran});
+          ToastAndroid.show(
+            ' Laporan Berasil Di Imput ',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
+          this.setState({loading: false, modal: true});
+        } else {
+          console.log(' respon dari Laporan : ', respon);
+        }
       })
       .catch((error) => {
         console.log('ini ada dari laporan error', error);
@@ -98,46 +130,76 @@ export class Pengeluaran extends Component {
           <View style={styles.boxDataInput}>
             <Text style={styles.font}> Tanggal :</Text>
             <TextInput
-              placeholder="TT - BB - TH"
+              value={`${this.state.tanggal}`}
               onChangeText={(taks) => this.setState({tanggal: taks})}
               keyboardType="number-pad"
             />
           </View>
+
           <View style={styles.boxDataInput}>
             <Text style={styles.font}> Jenis Pengeluaran : </Text>
+            <View style={styles.boxDataInput}>
+              <Text style={styles.font}> {this.state.JKeluaran}</Text>
+            </View>
             <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
               <TouchableOpacity
-                onPress={() => this.setState({beban_id: '1'})}
+                onPress={() =>
+                  this.setState({
+                    beban_id: '1',
+                    JKeluaran: 'Beban Gaji Karyawan',
+                  })
+                }
                 style={styles.boxKate}>
                 <Text style={styles.taksKate}>Beban Gaji Karyawan</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => this.setState({beban_id: '2'})}
+                onPress={() =>
+                  this.setState({beban_id: '2', JKeluaran: 'Beban Listrik'})
+                }
                 style={styles.boxKate}>
                 <Text style={styles.taksKate}>Beban Listrik</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => this.setState({beban_id: '3'})}
+                onPress={() =>
+                  this.setState({beban_id: '3', JKeluaran: 'Beban Air'})
+                }
                 style={styles.boxKate}>
                 <Text style={styles.taksKate}>Beban Air</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => this.setState({beban_id: '4'})}
+                onPress={() =>
+                  this.setState({
+                    beban_id: '4',
+                    JKeluaran: 'Beban Penyewaan Gedung',
+                  })
+                }
                 style={styles.boxKate}>
                 <Text style={styles.taksKate}>Beban Penyewaan Gedung</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => this.setState({beban_id: '5'})}
+                onPress={() =>
+                  this.setState({
+                    beban_id: '5',
+                    JKeluaran: 'Beban Angkut Penjualan',
+                  })
+                }
                 style={styles.boxKate}>
                 <Text style={styles.taksKate}>Beban Angkut Penjualan</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => this.setState({beban_id: '6'})}
+                onPress={() =>
+                  this.setState({
+                    beban_id: '6',
+                    JKeluaran: 'Harga Pokok Penjualan',
+                  })
+                }
                 style={styles.boxKate}>
                 <Text style={styles.taksKate}>Harga Pokok Penjualan</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => this.setState({beban_id: '7'})}
+                onPress={() =>
+                  this.setState({beban_id: '7', JKeluaran: 'Beban Lain-Lain'})
+                }
                 style={styles.boxKate}>
                 <Text style={styles.taksKate}>Beban Lain-Lain</Text>
               </TouchableOpacity>
@@ -169,10 +231,35 @@ export class Pengeluaran extends Component {
                 borderRadius: 10,
                 marginVertical: 30,
               }}>
-              <Text style={styles.tittel}> Buat Laporan </Text>
+              {this.state.loading ? (
+                <ActivityIndicator size={30} color="white" />
+              ) : (
+                <Text style={styles.tittel}> Buat Laporan </Text>
+              )}
             </View>
           </TouchableNativeFeedback>
         </ScrollView>
+        <Modal
+          visible={this.state.modal}
+          animationType="fade"
+          onRequestClose={() => this.setState({modal: false})}
+          transparent>
+          <View style={{flex: 1, backgroundColor: 'white'}}>
+            {this.state.dataRes.map((v, k) => {
+              return (
+                <View
+                  key={k}
+                  style={{padding: 5, margin: 10, backgroundColor: 'white'}}>
+                  <Text>Pengeluaran : {v.beban_id}</Text>
+                  <Text>Deskripsi : {v.deskripsi}</Text>
+                  <Text>
+                    subtotal_pengeluaran : Rp.{v.subtotal_pengeluaran}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+        </Modal>
       </View>
     );
   }
