@@ -41,7 +41,7 @@ export class LogIn extends Component {
       email: '',
       password: '',
       loading: false,
-      url: 'http://sammpah.herokuapp.com/password/reset',
+      url: 'http://katastima-pos.herokuapp.com/password/reset',
       urlEmail: 'https://mail.google.com/mail/u/0/#inbox',
       visible: true,
       checkbox: false,
