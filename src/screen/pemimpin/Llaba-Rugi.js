@@ -105,15 +105,19 @@ export class Lstok extends Component {
                 <TouchableNativeFeedback>
                   <View style={styles.boxDataMap}>
                     <Text>{'Bulan : ' + val.bulan}</Text>
-                    <Text>{'Staff : ' + val.jumlah_staff}</Text>
-                    <Text>{'Pembelian : ' + val.jumlah_pembelian}</Text>
+                    <Text>{'Jumlah Penjulan : ' + val.jumlah_penjualan}</Text>
+                    <Text>{'Total Penjulan : Rp.' + val.total_penjualan}</Text>
 
+                    <Text>{'Jumlah Pembelian : ' + val.jumlah_pembelian}</Text>
+                    <Text>{'Total Pembelian : Rp.' + val.total_pembelian}</Text>
                     <Text>
-                      {'Transakasi Non Member : ' + val.jumlah_supplier}
+                      {'Jumlah Pengeluaran : ' + val.jumlah_pengeluaran}
+                    </Text>
+                    <Text>
+                      {'Total Pengeluaran : Rp.' + val.total_pengeluaran}
                     </Text>
 
-                    <Text>{'Barang :' + val.jumlah_produk_dibeli}</Text>
-                    <Text>{'Penjualan : Rp.' + val.total_pembelian}</Text>
+                    <Text>{'Total Laba - Rugi : Rp.' + val.laba_rugi}</Text>
                   </View>
                 </TouchableNativeFeedback>
               </View>
@@ -136,14 +140,19 @@ export class Lstok extends Component {
                     })
                   }>
                   <View style={styles.boxDataMap}>
-                    <Text>{'Nama : ' + key + 1}</Text>
-                    <Text>{'Jumlah Pembeli : ' + val.jumlah_pembelian}</Text>
-                    <Text>{'Jumlah Staf : ' + val.jumlah_staff}</Text>
-                    <Text>{'Jumlah Supplaier : ' + val.jumlah_supplier}</Text>
+                    <Text>{'Mingggu ke : ' + val.minggu_ke}</Text>
+                    <Text>{'Jumlah Penjualan : ' + val.jumlah_penjualan}</Text>
+                    <Text>{'Total Penjulan : Rp.' + val.total_penjualan}</Text>
+                    <Text>{'Jumlah Pembelian : ' + val.jumlah_pembelian}</Text>
+                    <Text>{'Total Pembelian : Rp.' + val.total_pembelian}</Text>
                     <Text>
-                      {'Jumlah Produk diBeli : ' + val.jumlah_produk_dibeli}
+                      {'Jumlah Pengeluaran : ' + val.jumlah_pengeluaran}
                     </Text>
-                    <Text>{'Total : ' + val.total_pembelian}</Text>
+
+                    <Text>
+                      {'Total Pengeluaran : Rp.' + val.total_pengeluaran}
+                    </Text>
+                    <Text>{'Total laba - rugi  : Rp.' + val.laba_rugi}</Text>
                   </View>
                 </TouchableNativeFeedback>
               </View>
