@@ -143,7 +143,7 @@ export class LogIn extends Component {
             this.setState({loading: false});
           } else {
             this.alert();
-            console.log('anda belum verifikasi email');
+            console.log('anda belum verifikasi email ');
           }
         } else if (resjson.TypeError) {
           ToastAndroid.show(
@@ -151,10 +151,9 @@ export class LogIn extends Component {
             ToastAndroid.SHORT,
             ToastAndroid.CENTER,
           );
-          alert(resjson.error);
+
           this.setState({loading: false});
         } else if (resjson.error) {
-          alert(resjson.error);
           this.setState({loading: false});
         } else {
           console.log(error);

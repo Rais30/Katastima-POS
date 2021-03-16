@@ -11,6 +11,7 @@ import {
   ToastAndroid,
   ActivityIndicator,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import styles1 from '../../assets/style/boxAllRole/boxCari/boxCari';
 import styles from '../../assets/style/boxKasir/boxHomeKasir/index';
@@ -53,6 +54,22 @@ export class Home extends Component {
       dataBarang1: [],
       hargajual: '',
     };
+  }
+  alert() {
+    Alert.alert(
+      '',
+      `Apakah anda ingin melakukan Transaksik dengan Supplaiyer ini : `,
+      [
+        {
+          text: 'Iya',
+          onPress: () => this.GetPenjualan(),
+        },
+        {
+          text: 'Tutup',
+        },
+      ],
+      {cancelable: false},
+    );
   }
   Member = () => {
     if (this.state.staff_id != null) {
@@ -106,6 +123,7 @@ export class Home extends Component {
   };
   GetPenjualan() {
     console.log('mulai penjualan');
+
     const {token, staff_id} = this.state;
     const q = staff_id !== '' ? `/${staff_id}` : '';
     const url = `https://katastima-pos.herokuapp.com/api/staff/pembelian/form${q}`;
@@ -129,6 +147,7 @@ export class Home extends Component {
             loading: false,
             kondisi: false,
             penjualan_id: data.id,
+            modalMember: false,
           });
         } else {
           console.log('memmulai tambah stok gagal ', resjson);
@@ -433,14 +452,15 @@ export class Home extends Component {
                     return (
                       <View key={key}>
                         <TouchableNativeFeedback
-                          onPress={() =>
+                          onPress={() => {
                             this.setState({
                               staff_id: val.id,
                               namaMember: val.nama_supplier,
                               saldoMember: val.telepon_supplier,
                               alamatStaff: val.alamat_supplier,
-                            })
-                          }>
+                            });
+                            this.alert();
+                          }}>
                           <View style={styles.boxDataMap}>
                             <Text>{'Nama : ' + val.nama_supplier}</Text>
                             <Text>{'Alamat : ' + val.alamat_supplier}</Text>

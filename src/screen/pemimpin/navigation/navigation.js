@@ -5,6 +5,8 @@ import LtPenjualan from '../LtPenjualan';
 import LtPembelian from '../LtPembelian';
 import LlabaRugi from '../Llaba-Rugi';
 import Home from '../Home';
+import Lstok from './Lstok';
+
 const Tab = createMaterialBottomTabNavigator();
 
 function TabRumah() {
@@ -24,6 +26,8 @@ function TabRumah() {
             iconName = focused ? 'history' : 'history';
           } else if (route.name === 'Laba-Rugi') {
             iconName = focused ? 'account-circle' : 'account-circle';
+          } else if (route.name === 'Stok Barang') {
+            iconName = focused ? 'account-circle' : 'account-circle';
           }
           return <Icon name={iconName} size={25} color={color} />;
         },
@@ -40,6 +44,7 @@ function TabRumah() {
       <Tab.Screen name="Pembelian" component={LtPembelian} />
       <Tab.Screen name="Penjualan" component={LtPenjualan} />
       <Tab.Screen name="Laba-Rugi" component={LlabaRugi} />
+      <Tab.Screen name="Stok Barang" component={Lstok} />
     </Tab.Navigator>
   );
 }
